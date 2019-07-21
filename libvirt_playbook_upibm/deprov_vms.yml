@@ -1,0 +1,6 @@
+---
+- name: Libvirt VMs
+  hosts: ocp4_vm
+  gather_facts: false
+  roles:
+    - deprovisioning_libvirt

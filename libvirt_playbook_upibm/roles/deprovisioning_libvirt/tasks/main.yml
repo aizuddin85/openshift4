@@ -1,0 +1,29 @@
+---
+# tasks file for roles/deprovisioning_libvirt
+- name: Ensure VM are stopped
+  delegate_to: localhost
+  virt:
+    command: destroy
+    guest: "{{ inventory_hostname }}"
+  ignore_errors: true
+
+- name: Undefine the VM
+  delegate_to: localhost
+  virt:
+    command: undefine
+    guest: "{{ inventory_hostname }}"
+  ignore_errors: true
+
+- name: Clean up qcow slow disk
+  delegate_to: localhost
+  file:
+    path: '/var/lib/libvirt/images/{{ inventory_hostname }}.qcow2'
+    state: absent
+  when: vm_disktype == "slow"
+
+- name: Clean up qcow fast disk
+  delegate_to: localhost
+  file:
+    path: '/libvirt-nvme/{{ inventory_hostname }}.qcow2'
+    state: absent
+  when: vm_disktype == "fast"

@@ -1,0 +1,22 @@
+ddns-update-style interim;
+ignore client-updates;
+authoritative;
+allow booting;
+allow bootp;
+allow unknown-clients;
+
+subnet 192.168.50.0 netmask 255.255.255.0 {
+        range 192.168.50.140 192.168.50.160;
+        option routers 192.168.50.1;
+        option domain-name-servers 192.168.50.254;
+        option ntp-servers time.unisza.edu.my;
+        option domain-search "ocp4.bytewise.com.my","bytewise.com.my";
+        filename "pxelinux.0";
+        {% for vm in groups['helper_vm'] %}
+        next-server {{ hostvars[vm].vm_ipaddress }};
+        {% endfor %} 
+        {% for vm in groups['ocp4_master_vm'] %}
+          host {{ vm }} { hardware ethernet {{ hostvars[vm].vm_macaddress }}; fixed-address {{ hostvars[vm].vm_ipaddress }}; option host-name "{{ vm.split('.')[0] }}"; }
+        {% endfor %}   
+}
+

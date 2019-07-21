@@ -1,0 +1,390 @@
+---
+# tasks file for roles/dhcpd-server
+- name: Ensure pkgs installed
+  dnf:
+    name:
+      - dhcp-server
+      - tftp-server
+      - syslinux
+      - httpd
+      - haproxy.x86_64
+    state: latest
+  tags: initial_setup
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Update IdM master A DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: bytewise.com.my
+    record_type: A
+    record_name: "{{ inventory_hostname.split('.')[0] }}.{{ openshift_domain | trim }}"
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm']
+  tags: update_dns
+
+- name: Update IdM master PTR DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: 50.168.192.in-addr.arpa
+    record_type: PTR
+    record_name: "{{ vm_ipaddress.split('.')[3] | trim }}"
+    record_value: "{{ inventory_hostname}}."
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm']
+  tags: update_dns
+
+- name: Update IdM router/worker PTR DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: 50.168.192.in-addr.arpa
+    record_type: PTR
+    record_name: "{{ vm_ipaddress.split('.')[3] | trim }}"
+    record_value: "{{ inventory_hostname }}."
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_router_vm']
+  tags: update_dns
+
+- name: Update IdM Router DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: bytewise.com.my
+    record_type: A
+    record_name: "{{ inventory_hostname.split('.')[0] }}.{{ openshift_domain | trim }}"
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_router_vm']
+  tags: update_dns
+
+- name: Update IdM API DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: bytewise.com.my
+    record_type: A
+    record_name: api.{{ openshift_domain }}
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['helper_vm']
+  tags: update_dns
+
+- name: Update IdM API-INT DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: bytewise.com.my
+    record_type: A
+    record_name: api-int.{{ openshift_domain }}
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['helper_vm']
+  tags: update_dns
+
+- name: Update IdM etcd-0 DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: bytewise.com.my
+    record_type: A
+    record_name: etcd-0.ocp4
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm'][1] and "bootstrap" not in inventory_hostname
+  tags: update_dns
+
+- name: Update IdM etcd-1 DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: bytewise.com.my
+    record_type: A
+    record_name: etcd-1.ocp4
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm'][2] and "bootstrap" not in inventory_hostname
+  tags: update_dns
+
+- name: Update IdM etcd-2 DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: bytewise.com.my
+    record_type: A
+    record_name: etcd-2.ocp4
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm'][3] and "bootstrap" not in inventory_hostname
+  tags: update_dns
+
+- name: Ensure _etcd-server-ssl._tcp.ocp4 exists in IdM ldap
+  delegate_to: localhost
+  ldap_entry:
+    dn: "idnsname=_etcd-server-ssl._tcp.ocp4,idnsname=bytewise.com.my.,cn=dns,dc=bytewise,dc=com,dc=my"
+    state: present
+    server_uri: ldap://idm.bytewise.com.my/
+    bind_dn: uid=admin,cn=users,cn=accounts,dc=bytewise,dc=com,dc=my
+    bind_pw: '{{ ipa_password }}'
+    validate_certs: false
+    objectClass:
+      - top
+      - idnsrecord
+  ignore_errors: true
+  tags: update_dns
+    
+- name: Update _etcd-server-ssl._tcp.ocp4 record
+  delegate_to: localhost
+  ldap_attr:
+    dn: idnsname=_etcd-server-ssl._tcp.ocp4,idnsname=bytewise.com.my.,cn=dns,dc=bytewise,dc=com,dc=my
+    name: sRVRecord
+    values: ["0 10 2380 etcd-0.ocp4", "0 10 2380 etcd-1.ocp4", "0 10 2380 etcd-2.ocp4"]
+    server_uri: ldap://idm.bytewise.com.my/
+    bind_dn: uid=admin,cn=users,cn=accounts,dc=bytewise,dc=com,dc=my
+    bind_pw: redhat123
+    validate_certs: false
+  tags: update_dns
+
+- name: Updating /etc/dhcp/dhcpd.conf
+  template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+  tags: dhcpd_update
+  when: inventory_hostname in groups['helper_vm']
+  changed_when: true
+  notify:
+    - restart dhcpd
+
+- name: Allowing firewall rules for services
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  when: inventory_hostname in groups['helper_vm']
+  with_items:
+    - dhcp
+    - tftp
+    - http
+    - https
+    - dns
+
+- name: Allowing firewall rules for ports
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  when: inventory_hostname in groups['helper_vm']
+  with_items:
+    - 6443/tcp
+    - 22623/tcp
+    - 8080/tcp
+    - 32700/tcp
+
+- name: Allowing haproxy to bind to alternate port
+  seport:
+    ports: "{{ item }}"
+    setype: http_port_t
+    state: present
+    proto: tcp
+  when: inventory_hostname in groups['helper_vm']
+  with_items:
+    - 22623
+    - 6443
+    - 32700 
+    - 5001
+    - 5002
+    - 5003
+    - 5004 
+
+- name: Updating /etc/haproxy/haproxy.conf
+  template:
+    src: haproxy.conf.j2
+    dest: /etc/haproxy/haproxy.cfg
+  tags: haproxy_update
+  when: inventory_hostname in groups['helper_vm']
+  changed_when: true
+  notify:
+    - restart haproxy
+
+- name: Create PXE boot default directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  tags: initial_setup
+  when: inventory_hostname in groups['helper_vm']
+  with_items:
+    - /var/lib/tftpboot/openshift4/4.1.0
+    - /var/lib/tftpboot/pxelinux.cfg
+    - /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+    - /var/www/html/openshift4/4.1.0/images/
+
+- name: Update /var/lib/tftpboot/pxelinux.cfg/default
+  template:
+    src: default.j2
+    dest: /var/lib/tftpboot/pxelinux.cfg/default
+  tags: initial_setup
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Copy file for PXE boot
+  shell: cp -rvf /usr/share/syslinux/* /var/lib/tftpboot
+  tags: initial_setup
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Downloading RHCOS 4.1.0 kernel
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-installer-kernel
+    dest: /var/lib/tftpboot/openshift4/4.1.0/rhcos-4.1.0-x86_64-installer-kernel
+    validate_certs: false
+    timeout: 300
+  tags: initial_setup
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Downloading RHCOS 4.1.0 initram
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-installer-initramfs.img
+    dest: /var/lib/tftpboot/openshift4/4.1.0/rhcos-4.1.0-x86_64-installer-initramfs.img
+    timeout: 300
+    validate_certs: false
+  tags:
+    - initial_setup
+    - skip_fetching 
+  when: inventory_hostname in groups['helper_vm']
+
+
+- name: Downloading RHCOS 4.1.0 OS BIOS image
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-metal-bios.raw.gz
+    dest: /var/www/html/openshift4/4.1.0/images/rhcos-4.1.0-x86_64-metal-bios.raw.gz
+    timeout: 300
+    validate_certs: false
+  tags:
+    - initial_setup
+    - skip_fetching 
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Downloading OC installer binary
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux-{{ openshift_version }}.tar.gz
+    dest: /usr/bin/openshift-install-linux-{{ openshift_version }}.tar.gz
+    validate_certs: false
+    timeout: 300
+  tags: 
+    - initial_setup
+    - skip_fetching
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Downloading OC client binary
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-{{ openshift_version }}.tar.gz
+    dest: /usr/bin/openshift-client-linux-{{ openshift_version }}.tar.gz
+    validate_certs: false
+    timeout: 300
+  tags: 
+    - initial_setup
+    - skip_fetching
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Extracting downloaded installer binary
+  delegate_to: "{{ groups['helper_vm'] | first }}"
+  shell: tar -C /usr/bin -xvf /usr/bin/openshift-install-linux-{{ openshift_version }}.tar.gz
+  tags: 
+    - initial_setup
+    - skip_fetching
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Extracting downloaded client binary
+  delegate_to: "{{ groups['helper_vm'] | first }}"
+  shell: tar -C /usr/bin -xvf /usr/bin/openshift-client-linux-{{ openshift_version }}.tar.gz
+  tags: 
+    - initial_setup
+    - skip_fetching
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Restore SELinux fcontext
+  shell: restorecon -RFv "{{ item }}"
+  tags: initial_setup
+  when: inventory_hostname in groups['helper_vm']
+  with_items:
+    - /var/lib/tftpboot/openshift4/4.1.0
+    - /var/lib/tftpboot/pxelinux.cfg
+    - /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+
+- name: Configure http to listen to 8080
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Listen 80'
+    line: 'Listen 8080'
+  when: inventory_hostname in groups['helper_vm']
+  changed_when: true
+  tags: initial_setup
+  notify:
+    - restart httpd
+    - restart tftp
+
+- name: Start all services
+  service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  when: inventory_hostname in groups['helper_vm'] 
+  tags: start_services
+  with_items:
+    - tftp
+    - dhcpd
+    - httpd
+    - haproxy
+
+- name: Make working directory
+  file:
+    path: ~/ocp4
+    state: directory
+  when: inventory_hostname in groups['helper_vm']
+  tags: ign_prep
+
+- name: Prepare ignition files
+  template:
+    src: install-config-base.yaml.j2
+    dest: ~/ocp4/install-config.yaml
+  tags: ign_prep
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Execute openshift installer file
+  shell: cd ocp4; openshift-install create ignition-configs --dir=.
+  tags: ign_prep
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Copy ign file to http hosted folder
+  shell: cp -rvf ~/ocp4/*.ign /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+  tags: ign_prep
+  when: inventory_hostname in groups['helper_vm']

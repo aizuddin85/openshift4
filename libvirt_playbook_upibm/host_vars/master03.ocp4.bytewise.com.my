@@ -1,0 +1,9 @@
+vm_disktype: "fast"
+vm_disksize: 50G
+vm_qcow2_disk: "master01.ocp4.qcow2"
+vm_macaddress: "52:54:00:7d:2d:13"
+vm_ipaddress: "192.168.50.143"
+vm_network: "LocalNet50"
+vm_vcpu: 6
+vm_cpumode: "Skylake-Client"
+vm_memory_gb: 8

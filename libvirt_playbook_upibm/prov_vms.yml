@@ -1,0 +1,18 @@
+---
+- name: Libvirt VMs
+  vars:
+    openshift_version: 4.1.6
+    openshift_domain: ocp4
+    libvirt_storage_pool:
+      - default
+      - fastdisk
+  vars_prompt:
+    - name: ipa_password
+      prompt: "Please enter administrative password for IdM:"
+      private: yes
+  hosts: all
+  gather_facts: false
+  roles:
+    - helper_vm
+    - provisioning_libvirt
+
