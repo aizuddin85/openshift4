@@ -102,6 +102,21 @@
   when: inventory_hostname in groups['helper_vm']
   tags: update_dns
 
+- name: Update IdM Wildcard DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: bytewise.com.my
+    record_type: A
+    record_name: \*.{{ openshift_domain }}
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['helper_vm']
+  tags: update_dns
+
 - name: Update IdM etcd-0 DNS Record
   delegate_to: localhost
   ipa_dnsrecord:
