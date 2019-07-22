@@ -8,6 +8,8 @@
     - configure_pxe_server
   when: inventory_hostname in groups['helper_vm']
   with_items:
+    - "{{ pxe_image_directory }}"
+    - "{{ pxe_boot_direcotry }}"
 
 - name: Downloading RHCOS 4.1.0 initram
   get_url:

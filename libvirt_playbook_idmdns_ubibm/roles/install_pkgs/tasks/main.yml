@@ -2,16 +2,16 @@
 # tasks file for roles/install_pkgs
 - name: Ensure pkgs installed (RHEL 8)
   dnf:
-    name: "{{ rhel8_pkg }}"
+    name: "{{ rhel8_pkgs }}"
     state: latest
   tags: initial_setup
-  when: inventory_hostname in groups['helper_vm'] and ansible_lsb.major_release|int == 8
+  when: inventory_hostname in groups['helper_vm'] and ansible_distribution_version|int == 8
 
 - name: Ensure pkgs installed (RHEL 7)
   dnf:
-    name: "{{ rhel7_pkg }}"
+    name: "{{ rhel7_pkgs }}"
     state: latest
   tags: initial_setup
-  when: inventory_hostname in groups['helper_vm'] and ansible_lsb.major_release|int == 7
+  when: inventory_hostname in groups['helper_vm'] and ansible_distribution_version|int == 7
 
 

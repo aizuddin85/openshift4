@@ -12,7 +12,7 @@
 
 - name: Downloading OC client binary
   get_url:
-    url: "{{ oc client_url }}"
+    url: "{{ oc_client_url }}"
     dest: /usr/bin/
     validate_certs: false
     timeout: 300

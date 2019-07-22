@@ -3,11 +3,11 @@
   vars:
     openshift_version: 4.1.6
     openshift_domain: ocp4
-  hosts: all
-  gather_facts: false
+  hosts: helper_vm
+  gather_facts: true
   roles:
     - install_pkgs
-    - firewall_rules
+    - firewalld_rules
     - selinux_rules
     - configure_http_server
     - configure_pxe_server
