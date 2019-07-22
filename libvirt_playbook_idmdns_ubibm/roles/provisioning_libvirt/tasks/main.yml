@@ -6,12 +6,16 @@
     src: machine-template.xml.j2
     dest: ~/machine-template-{{ inventory_hostname }}.xml
   when: "'ocp4_nodes' in group_names"
+  tags:
+    - provisioning_libvirt
 
 - name: Creating QCOW2 disk - PCIe NVME disk
   delegate_to: localhost
   shell:
     cmd: "qemu-img create -f qcow2 /libvirt-nvme/{{ inventory_hostname }}.qcow2 {{ vm_disksize }}"
   when: vm_disktype == "fast" and "'ocp4_nodes' in group_names"
+  tags:
+    - provisioning_libvirt
 
 - name: Ensure correct permission 
   delegate_to: localhost
@@ -19,12 +23,16 @@
     path: '/libvirt-nvme/{{ inventory_hostname }}.qcow2'
     mode: u+rw,g-rwx,o-rwx
   when: vm_disktype == "fast" and "'ocp4_nodes' in group_names"
+  tags:
+    - provisioning_libvirt
 
 - name: Creating QCOW2 disk - M.2 SSD disk
   delegate_to: localhost
   shell:  
     cmd: "qemu-img create -f qcow2 /var/lib/libvirt/images/{{ inventory_hostname }}.qcow2 {{ vm_disksize }}"
   when: vm_disktype == "slow" and "'ocp4_nodes' in group_names"
+  tags:
+    - provisioning_libvirt
 
 - name: Ensure correct permission 
   delegate_to: localhost
@@ -32,13 +40,17 @@
     path: '/var/lib/libvirt/images/{{ inventory_hostname }}.qcow2'
     mode: u+rw,g-rwx,o-rwx
   when: vm_disktype == "slow" and "'ocp4_nodes' in group_names"
+  tags:
+    - provisioning_libvirt
 
 - name: refresh storage pool
   run_once: true
   delegate_to: localhost
   shell: virsh pool-refresh "{{ item }}"
   with_items: "{{ libvirt_storage_pool }}"
-  tags: refresh_storage_pool
+  tags:
+    - provisioning_libvirt
+    - refresh_storage_pool
 
 - name: Defining VM
   delegate_to: localhost
@@ -46,3 +58,5 @@
     command: define
     xml: "{{ lookup('template','machine-template.xml.j2') }}"
   when: "'ocp4_nodes' in group_names" 
+  tags:
+    - provisioning_libvirt
