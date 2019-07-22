@@ -1,8 +1,0 @@
----
-# vars file for roles/helper_vm
-pkgs_list:
-  - dhcp-server
-  - tftp-server
-  - syslinux
-  - httpd
-  - haproxy.x86_64

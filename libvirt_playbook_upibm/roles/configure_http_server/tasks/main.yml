@@ -1,0 +1,51 @@
+---
+# tasks file for roles/configure_http_server
+- name: Create web hosting directory for images and ignitions file
+  file:
+    path: "{{ item }}"
+    state: directory
+  when: inventory_hostname in groups['helper_vm']
+  tags:
+      - configure_http_server
+  with_items:
+    - "{{ images_directory }}"
+    - "{{ ignitions_directory }}"
+
+- name: Downloading RHCOS 4.1.0 OS BIOS image
+  get_url:
+    url: "{{ rhcos_biosimg_url }}"
+    dest: "{{ images_directory }}"
+    timeout: 300
+    validate_certs: false
+  tags:
+      - configure_http_server
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Restoring SELinux fscontext
+  shell: restorecon -RFv "{{ item }}"
+  tags:
+      - configure_http_server
+  when: inventory_hostname in groups['helper_vm']
+  with_items:
+    - "{{ images_directory }}"
+    - "{{ ignitions_directory }}"
+
+- name: Configure http to listen to 8080
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Listen 80'
+    line: 'Listen 8080'
+  when: inventory_hostname in groups['helper_vm']
+  tags:
+      - configure_http_server
+
+- name: Start http services
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
+  when: inventory_hostname in groups['helper_vm'] 
+  tags:
+      - configure_http_server
+
+

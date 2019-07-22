@@ -1,0 +1,15 @@
+---
+# vars file for roles/install_pkgs
+rhel8_pkgs:
+  - dhcp-server
+  - tftp-server
+  - syslinux
+  - httpd
+  - haproxy.x86_64
+
+rhel7_pkgs:
+  - dhcpd
+  - tftp-server
+  - syslinux
+  - httpd
+  - haproxy.x86_64

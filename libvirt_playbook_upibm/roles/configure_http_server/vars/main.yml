@@ -1,0 +1,5 @@
+---
+# vars file for roles/configure_http_server
+rhcos_biosimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-metal-bios.raw.gz
+images_directory: /var/www/html/openshift4/images/
+ignitions_directory: /var/www/html/openshift4/{{ openshift_version }}/ignitions/

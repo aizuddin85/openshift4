@@ -1,0 +1,19 @@
+---
+# tasks file for roles/firewalld_rules
+- name: Allowing firewall rules for services
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  when: inventory_hostname in groups['helper_vm']
+  with_items: "{{ allowed_services }}"
+
+- name: Allowing firewall rules for ports
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  when: inventory_hostname in groups['helper_vm']
+  with_items: "{{ allowed_ports }}"

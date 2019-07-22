@@ -1,0 +1,4 @@
+---
+# vars file for roles/configure_ocp_cli_binary
+oc_install_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux-{{ openshift_version }}.tar.gz
+oc_client_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-{{ openshift_version }}.tar.gz

@@ -1,0 +1,34 @@
+---
+# tasks file for roles/configure_ignitions_file
+- name: Clean up previoys working directory
+  file:
+    path: ~/ocp4/
+    state: absent
+  when: inventory_hostname in groups['helper_vm']
+  tags: 
+    - configure_ignitions_file
+  
+- name: Ensure working directory exists
+  file:
+    path: ~/ocp4
+    state: directory
+  when: inventory_hostname in groups['helper_vm']
+  tags: 
+    - configure_ignitions_file
+
+- name: Prepare ignition files
+  template:
+    src: install-config-base.yaml.j2
+    dest: ~/ocp4/install-config.yaml
+  tags: ign_prep
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Execute openshift installer file
+  shell: cd ocp4; openshift-install create ignition-configs --dir=.
+  tags: ign_prep
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Copy ign file to http hosted folder
+  shell: cp -rvf ~/ocp4/*.ign /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+  tags: ign_prep
+  when: inventory_hostname in groups['helper_vm']

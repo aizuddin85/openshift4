@@ -1,0 +1,10 @@
+---
+# vars file for roles/selinux_rules
+allowed_http_port_t:
+    - 22623
+    - 6443
+    - 32700 
+    - 5001
+    - 5002
+    - 5003
+    - 5004 
