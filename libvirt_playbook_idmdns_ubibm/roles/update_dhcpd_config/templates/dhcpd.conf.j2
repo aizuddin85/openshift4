@@ -13,8 +13,8 @@ subnet 192.168.50.0 netmask 255.255.255.0 {
         option routers 192.168.50.1;
         option domain-name-servers 192.168.50.254;
         option ntp-servers time.unisza.edu.my;
-        option domain-search "ocp4.bytewise.com.my","bytewise.com.my";
-        filename "pxelinux.0";
+        option domain-search "ocp4.techbeatly.com","techbeatly.com";
+        filename "pxel
         {% for vm in groups['helper_vm'] %}
         next-server {{ hostvars[vm].vm_ipaddress }};
         {% endfor %} 
