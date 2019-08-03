@@ -3,4 +3,5 @@
   hosts: ocp4_nodes
   gather_facts: false
   roles:
+    - cleanup_tftp_config
     - deprovisioning_libvirt

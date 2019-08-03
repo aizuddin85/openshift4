@@ -6,7 +6,7 @@
     src: dhcpd.conf.j2
     dest: /etc/dhcp/dhcpd.conf
   tags:
-    - roles/update_dhcpd_config
+    - update_dhcpd_config
   when: inventory_hostname in groups['helper_vm']
 
 - name: Restart DHCP services
@@ -16,5 +16,5 @@
     enabled: yes
   when: inventory_hostname in groups['helper_vm'] 
   tags:
-    - roles/update_dhcpd_config
+    - update_dhcpd_config
 

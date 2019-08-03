@@ -3,7 +3,7 @@
   vars:
     redhat_pull_secret: ''
     core_ssh_publickey: ''
-    openshift_version: 4.1.6
+    openshift_version: 4.1.8
     openshift_domain: ocp4
     libvirt_storage_pool:
       - default
@@ -17,6 +17,8 @@
   roles:
     - update_idmdns_server
     - update_dhcpd_config
+    - {role: configure_pxe_server, tags: ['update_pxe_config']}
     - update_haproxy_config
+    - configure_ocp_cli_binary
     - configure_ignitions_file
-
+    - provisioning_libvirt

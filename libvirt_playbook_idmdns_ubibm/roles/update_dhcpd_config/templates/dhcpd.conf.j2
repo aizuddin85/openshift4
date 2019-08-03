@@ -18,7 +18,16 @@ subnet 192.168.50.0 netmask 255.255.255.0 {
         {% for vm in groups['helper_vm'] %}
         next-server {{ hostvars[vm].vm_ipaddress }};
         {% endfor %} 
-        {% for vm in groups['ocp4_nodes'] %}
+        {% for vm in groups['ocp4_master_vm'] %}
+          {% if vm not in groups['ocp4_bootstrap_vm'] %}
+            host {{ vm }} { hardware ethernet {{ hostvars[vm].vm_macaddress }}; fixed-address {{ hostvars[vm].vm_ipaddress }}; option host-name "{{ vm.split('.')[0] }}"; }
+          {% endif %}
+        {% endfor %} 
+        {% for vm in groups['ocp4_bootstrap_vm'] %}
           host {{ vm }} { hardware ethernet {{ hostvars[vm].vm_macaddress }}; fixed-address {{ hostvars[vm].vm_ipaddress }}; option host-name "{{ vm.split('.')[0] }}"; }
-        {% endfor %}   
+        {% endfor %}
+        {% for vm in groups['ocp4_worker_vm'] %}
+          host {{ vm }} { hardware ethernet {{ hostvars[vm].vm_macaddress }}; fixed-address {{ hostvars[vm].vm_ipaddress }}; option host-name "{{ vm.split('.')[0] }}"; }
+        {% endfor %}
+
 }

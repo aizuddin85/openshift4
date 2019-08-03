@@ -1,0 +1,26 @@
+---
+# tasks file for cleanup_tftp_config
+- name: Clean up /var/lib/tftpboot/pxelinux.cfg/bootstrap
+  delegate_to: "{{ groups['helper_vm'] | first }}"
+  file:
+    path: '/var/lib/tftpboot/pxelinux.cfg/01-{{ hostvars[item]["vm_macaddress"] | replace(":", "-") | lower }}'
+    state: absent
+  with_items: "{{ groups['ocp4_bootstrap_vm'] }}"
+
+- name: Clean up /var/lib/tftpboot/pxelinux.cfg/master
+  delegate_to: "{{ groups['helper_vm'] | first }}"
+  file:
+    path: '/var/lib/tftpboot/pxelinux.cfg/01-{{ hostvars[item]["vm_macaddress"] | replace(":", "-") | lower }}'
+    state: absent
+  when: "item  not in groups['ocp4_bootstrap_vm']"
+  with_items: "{{ groups['ocp4_master_vm'] }}"
+
+- name: Clean up /var/lib/tftpboot/pxelinux.cfg/worker
+  delegate_to: "{{ groups['helper_vm'] | first }}"
+  file:
+    path: '/var/lib/tftpboot/pxelinux.cfg/01-{{ hostvars[item]["vm_macaddress"] | replace(":", "-") | lower }}'
+    state: absent
+  with_items: "{{ groups['ocp4_worker_vm'] }}"
+
+  
+

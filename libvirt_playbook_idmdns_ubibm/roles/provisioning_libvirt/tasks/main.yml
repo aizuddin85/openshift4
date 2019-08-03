@@ -13,7 +13,7 @@
   delegate_to: localhost
   shell:
     cmd: "qemu-img create -f qcow2 /libvirt-nvme/{{ inventory_hostname }}.qcow2 {{ vm_disksize }}"
-  when: vm_disktype == "fast" and "'ocp4_nodes' in group_names"
+  when: '"ocp4_nodes" in group_names and vm_disktype == "fast"'
   tags:
     - provisioning_libvirt
 
@@ -22,7 +22,7 @@
   file:
     path: '/libvirt-nvme/{{ inventory_hostname }}.qcow2'
     mode: u+rw,g-rwx,o-rwx
-  when: vm_disktype == "fast" and "'ocp4_nodes' in group_names"
+  when: "'ocp4_nodes' in group_names and vm_disktype == 'fast'"
   tags:
     - provisioning_libvirt
 
@@ -30,7 +30,7 @@
   delegate_to: localhost
   shell:  
     cmd: "qemu-img create -f qcow2 /var/lib/libvirt/images/{{ inventory_hostname }}.qcow2 {{ vm_disksize }}"
-  when: vm_disktype == "slow" and "'ocp4_nodes' in group_names"
+  when: "'ocp4_nodes' in group_names and vm_disktype == 'slow'"
   tags:
     - provisioning_libvirt
 
@@ -39,7 +39,7 @@
   file:
     path: '/var/lib/libvirt/images/{{ inventory_hostname }}.qcow2'
     mode: u+rw,g-rwx,o-rwx
-  when: vm_disktype == "slow" and "'ocp4_nodes' in group_names"
+  when: "'ocp4_nodes' in group_names and vm_disktype == 'slow'"
   tags:
     - provisioning_libvirt
 

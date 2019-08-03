@@ -28,7 +28,21 @@
   tags: ign_prep
   when: inventory_hostname in groups['helper_vm']
 
+- name: Ensure web hosting directory exists
+  file:
+    path: /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+    state: directory
+    owner: apache
+    group: root
+  tags: ign_prep
+  when: inventory_hostname in groups['helper_vm']
+ 
 - name: Copy ign file to http hosted folder
   shell: cp -rvf ~/ocp4/*.ign /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+  tags: ign_prep
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Restore SELinux fcontext /var/www/html
+  command: restorecon -RFv /var/www/html
   tags: ign_prep
   when: inventory_hostname in groups['helper_vm']
