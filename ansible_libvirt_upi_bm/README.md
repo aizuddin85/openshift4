@@ -1,3 +1,5 @@
+[![techbeatly](https://www.techbeatly.com/wp-content/uploads/2018/05/techbeatly-logo-v1.png)](https://www.techbeatly.com/)
+
 ## Introduction
 
 There are four main parts in this playbook.
