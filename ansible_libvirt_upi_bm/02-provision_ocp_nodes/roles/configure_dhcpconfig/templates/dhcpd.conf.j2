@@ -9,7 +9,6 @@ default-lease-time -1;
 max-lease-time -1;
 
 subnet {{ dhcp_network }} netmask {{ dhcp_netmask }} {
-        range {{ dhcp_options_range }};
         option routers {{ dhcp_options_router }};
         option domain-name-servers {{ dhcp_options_dns }};
         option ntp-servers {{ dhcp_options_ntp_server }};
