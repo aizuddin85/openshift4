@@ -1,0 +1,30 @@
+---
+# tasks file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_ocpcli
+# tasks file for roles/configure_ocp_cli_binary
+- name: Downloading OC installer binary
+  get_url:
+    url: "{{ oc_install_url }}"
+    dest: /usr/bin/
+    validate_certs: false
+    timeout: 300
+  tags: 
+    - configure_ocp_cli_binary
+
+- name: Downloading OC client binary
+  get_url:
+    url: "{{ oc_client_url }}"
+    dest: /usr/bin/
+    validate_certs: false
+    timeout: 300
+  tags: 
+    - configure_ocp_cli_binary
+
+- name: Extracting downloaded installer binary
+  shell: tar -C /usr/bin -xvf /usr/bin/openshift-install-linux-{{ openshift_version }}.tar.gz
+  tags: 
+    - configure_ocp_cli_binary
+
+- name: Extracting downloaded client binary
+  shell: tar -C /usr/bin -xvf /usr/bin/openshift-client-linux-{{ openshift_version }}.tar.gz
+  tags: 
+    - configure_ocp_cli_binary

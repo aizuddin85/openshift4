@@ -1,0 +1,7 @@
+---
+- name: Clean up nodes
+  hosts: ocp4_nodes
+  gather_facts: false
+  roles:
+    - cleanup_pxeconfig
+    - undefine_ocpvms

@@ -1,0 +1,131 @@
+#---------------------------------------------------------------------
+# MANAGED BY ANSIBLE!!! .  See the
+# full configuration options online.
+#
+#   https://www.haproxy.org/download/1.8/doc/configuration.txt
+#
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# Global settings
+#---------------------------------------------------------------------
+global
+    # to have these messages end up in /var/log/haproxy.log you will
+    # need to:
+    #
+    # 1) configure syslog to accept network log events.  This is done
+    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
+    #    /etc/sysconfig/syslog
+    #
+    # 2) configure local2 events to go to the /var/log/haproxy.log
+    #   file. A line like the following can be added to
+    #   /etc/sysconfig/syslog
+    #
+    #    local2.*                       /var/log/haproxy.log
+    #
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+    # utilize system-wide crypto-policies
+    ssl-default-bind-ciphers PROFILE=SYSTEM
+    ssl-default-server-ciphers PROFILE=SYSTEM
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+
+#---------------------------------------------------------------------
+# round robin balancing for OCP Kubernetes API Server
+#---------------------------------------------------------------------
+ frontend k8s_api
+   bind *:6443
+   mode tcp
+   default_backend k8s_api_backend
+ backend k8s_api_backend
+   balance roundrobin
+   mode tcp
+   {% for vm in groups['ocp4_master_vm'] %}
+      server {{ vm.split('.')[0] }} {{ hostvars[vm].vm_ipaddress }}:6443 check
+   {% endfor %}
+
+
+# ---------------------------------------------------------------------
+# round robin balancing for OCP Machine Config Server
+# ---------------------------------------------------------------------
+ frontend machine_config
+   bind *:22623
+   mode tcp
+   default_backend machine_config_backend
+ backend machine_config_backend
+   balance roundrobin
+   mode tcp
+   {% for vm in groups['ocp4_master_vm'] %}
+      server {{ vm.split('.')[0] }} {{ hostvars[vm].vm_ipaddress }}:22623 check
+   {% endfor %}
+
+
+# ---------------------------------------------------------------------
+# round robin balancing for OCP Ingress Insecure Port
+# ---------------------------------------------------------------------
+ frontend ingress_insecure
+   bind *:80
+   mode tcp
+   default_backend ingress_insecure_backend
+ backend ingress_insecure_backend
+   balance roundrobin
+   mode tcp
+   {% for vm in groups['ocp4_worker_vm'] %}
+      server {{ vm.split('.')[0] }} {{ hostvars[vm].vm_ipaddress }}:80 check
+   {% endfor %}
+
+# ---------------------------------------------------------------------
+# round robin balancing for OCP Ingress Secure Port
+# ---------------------------------------------------------------------
+ frontend ingress_secure
+   bind *:443
+   mode tcp
+   default_backend ingress_secure_backend
+ backend ingress_secure_backend
+   balance roundrobin
+   mode tcp
+   {% for vm in groups['ocp4_worker_vm'] %}
+      server {{ vm.split('.')[0] }} {{ hostvars[vm].vm_ipaddress }}:443 check
+   {% endfor %}
+
+# ---------------------------------------------------------------------
+# Exposing HAProxy Statistic Page
+# ---------------------------------------------------------------------
+ listen stats
+     bind :32700
+     stats enable
+     stats uri /
+     stats hide-version
+     stats auth {{ haproxy_stat_user }}:{{ haproxy_stat_pass }}

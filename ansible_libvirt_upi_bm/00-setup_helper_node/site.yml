@@ -1,0 +1,12 @@
+---
+- name: Preparing & Configuring Helper Node
+  become: true
+  hosts: helper_vm
+  gather_facts: true
+  roles:
+   - install_pkgs
+   - configure_firewall
+   - configure_selinux
+   - configure_http
+   - configure_pxe
+   - configure_ocpcli

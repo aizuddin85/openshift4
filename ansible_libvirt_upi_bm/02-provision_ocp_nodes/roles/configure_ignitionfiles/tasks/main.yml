@@ -1,0 +1,46 @@
+---
+# tasks file for roles/configure_ignitionfiles
+- name: Clean up previoys working directory
+  file:
+    path: ~/ocp4/
+    state: absent
+  tags: 
+    - configure_ignitions_file
+  
+- name: Ensure working directory exists
+  file:
+    path: ~/ocp4
+    state: directory
+  tags: 
+    - configure_ignitions_file
+
+- name: Prepare ignition files
+  template:
+    src: install-config.yaml.j2
+    dest: ~/ocp4/install-config.yaml
+  tags: 
+    - configure_ignitions_file
+
+- name: Execute openshift installer file
+  shell: openshift-install create ignition-configs --dir=/root/ocp4
+  tags: 
+    - configure_ignitions_file
+
+- name: Ensure web hosting directory exists
+  file:
+    path: /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+    state: directory
+    owner: apache
+    group: root
+  tags: 
+    - configure_ignitions_file
+ 
+- name: Copy ign file to http hosted folder
+  shell: cp -rvf ~/ocp4/*.ign /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+  tags: 
+    - configure_ignitions_file
+
+- name: Restore SELinux fcontext /var/www/html
+  command: restorecon -RFv /var/www/html
+  tags: 
+    - configure_ignitions_file

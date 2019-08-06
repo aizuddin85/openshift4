@@ -1,0 +1,16 @@
+---
+# tasks file for roles/configure_lbconfig
+- name: Updating /etc/haproxy/haproxy.conf
+  template:
+    src: haproxy.conf.j2
+    dest: /etc/haproxy/haproxy.cfg
+  tags:
+    - update_haproxy_config
+
+- name: Restart haproxy services
+  service:
+    name: haproxy
+    state: restarted
+    enabled: yes
+  tags:
+    - update_haproxy_config

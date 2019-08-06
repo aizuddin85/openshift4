@@ -1,0 +1,19 @@
+---
+# tasks file for roles/deploy_ocpvms
+- name: Generate VM template
+  delegate_to: localhost
+  template:
+    src: machine-template.xml.j2
+    dest: ~/machine-template-{{ inventory_hostname }}.xml
+  when: "'ocp4_nodes' in group_names"
+  tags:
+    - provisioning_libvirt
+    
+- name: Defining VM
+  delegate_to: localhost
+  virt:
+    command: define
+    xml: "{{ lookup('template','machine-template.xml.j2') }}"
+  when: "'ocp4_nodes' in group_names" 
+  tags:
+    - provisioning_libvirt

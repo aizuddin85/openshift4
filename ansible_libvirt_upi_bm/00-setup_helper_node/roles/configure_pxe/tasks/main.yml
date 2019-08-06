@@ -1,0 +1,53 @@
+---
+# tasks file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_pxe
+# tasks file for roles/configure_pxe_server
+- name: Create PXE boot default directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  tags:
+    - configure_pxe_server
+  with_items:
+    - "{{ pxe_image_directory }}"
+    - "{{ pxe_boot_direcotry }}"
+
+- name: Downloading RHCOS 4.1.0 initram
+  get_url:
+    url: "{{ rhcos_initramfs_url }}"
+    dest: "{{ pxe_image_directory }}"
+    timeout: 300
+    validate_certs: false
+  tags:
+      - configure_pxe_server
+      - download_rhcos_initram
+
+- name: Downloading RHCOS 4.1.0 kernel
+  get_url:
+    url: "{{ rhcos_kernel_url }}"
+    dest: "{{ pxe_image_directory }}"
+    validate_certs: false
+    timeout: 300
+  tags:
+      - configure_pxe_server
+      - download_rhcos_kernel
+
+- name: Copy file for PXE boot
+  shell: cp -rvf /usr/share/syslinux/* /var/lib/tftpboot
+  tags:
+      - configure_pxe_server
+
+- name: Restore SELinux fcontext
+  shell: restorecon -RFv "{{ item }}"
+  tags:
+      - configure_pxe_server
+  with_items:
+    - "{{ pxe_image_directory }}"
+    - "{{ pxe_boot_direcotry }}"
+
+- name: start tftp
+  service:
+    name: tftp
+    state: restarted
+    enabled: yes
+  tags:
+      - configure_pxe_server

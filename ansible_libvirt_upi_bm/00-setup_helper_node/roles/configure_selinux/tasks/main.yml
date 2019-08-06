@@ -1,0 +1,9 @@
+---
+# tasks file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_selinux
+- name: Allowing haproxy to bind to alternate port
+  seport:
+    ports: "{{ item }}"
+    setype: http_port_t
+    state: present
+    proto: tcp
+  with_items: "{{ allowed_http_port_t }}"

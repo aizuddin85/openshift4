@@ -1,0 +1,187 @@
+---
+# tasks file for 01-setup_idm_dns/roles/configure_idmdns
+- name: Update IdM master A DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_a_zone }}'
+    record_type: A
+    record_name: "{{ inventory_hostname.split('.')[0] }}.{{ openshift_domain | trim }}"
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm']
+  tags:
+    - update_idmdns_server
+
+- name: Update IdM master PTR DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_ptr_zone }}'
+    record_type: PTR
+    record_name: "{{ vm_ipaddress.split('.')[3] | trim }}"
+    record_value: "{{ inventory_hostname}}."
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm']
+  tags:
+    - update_idmdns_server
+
+- name: Update IdM router/worker PTR DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_ptr_zone }}'
+    record_type: PTR
+    record_name: "{{ vm_ipaddress.split('.')[3] | trim }}"
+    record_value: "{{ inventory_hostname }}."
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_worker_vm']
+  tags:
+    - update_idmdns_server
+
+- name: Update IdM Router DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_a_zone }}'
+    record_type: A
+    record_name: "{{ inventory_hostname.split('.')[0] }}.{{ openshift_domain | trim }}"
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_worker_vm']
+  tags:
+    - update_idmdns_server
+
+- name: Update IdM API DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_a_zone }}'
+    record_type: A
+    record_name: api.{{ openshift_domain }}
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['helper_vm']
+  tags: update_dns
+
+- name: Update IdM API-INT DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_a_zone }}'
+    record_type: A
+    record_name: api-int.{{ openshift_domain }}
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['helper_vm']
+  tags: update_dns
+
+- name: Update IdM Wildcard DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_a_zone }}'
+    record_type: A
+    record_name: '*.{{ openshift_routedomain }}.{{ openshift_domain }}'
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['helper_vm']
+  tags: update_dns
+
+- name: Update IdM etcd-0 DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_a_zone }}'
+    record_type: A
+    record_name: etcd-0.ocp4
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm'][1] and "bootstrap" not in inventory_hostname
+  tags:
+    - update_idmdns_server
+
+- name: Update IdM etcd-1 DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_a_zone }}'
+    record_type: A
+    record_name: etcd-1.ocp4
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm'][2] and "bootstrap" not in inventory_hostname
+  tags:
+    - update_idmdns_server
+
+- name: Update IdM etcd-2 DNS Record
+  delegate_to: localhost
+  ipa_dnsrecord:
+    ipa_host: '{{ ipa_host }}'
+    ipa_user: '{{ ipa_user }}'
+    ipa_pass: '{{ ipa_password }}'
+    state: present
+    zone_name: '{{ dns_a_zone }}'
+    record_type: A
+    record_name: etcd-2.ocp4
+    record_value: "{{ vm_ipaddress }}"
+    validate_certs: no
+  when: inventory_hostname in groups['ocp4_master_vm'][3] and "bootstrap" not in inventory_hostname
+  tags:
+    - update_idmdns_server
+
+- name: Ensure _etcd-server-ssl._tcp.ocp4 exists in IdM ldap
+  delegate_to: localhost
+  ldap_entry:
+    dn: "{{ ldap_dns_srv_dn }}"
+    state: present
+    server_uri: '{{ ldap_uri }}'
+    bind_dn: '{{ ldap_bind }}'
+    bind_pw: '{{ ldap_password }}'
+    validate_certs: false
+    objectClass:
+      - top
+      - idnsrecord
+  ignore_errors: true
+  tags:
+    - update_idmdns_server
+    
+- name: Update _etcd-server-ssl._tcp.ocp4 record
+  delegate_to: localhost
+  ldap_attr:
+    dn: "{{ ldap_dns_srv_dn }}"
+    name: sRVRecord
+    values: ["0 10 2380 etcd-0.ocp4", "0 10 2380 etcd-1.ocp4", "0 10 2380 etcd-2.ocp4"]
+    server_uri: '{{ ldap_uri }}'
+    bind_dn: '{{ ldap_bind }}'
+    bind_pw: '{{ ldap_password }}'
+    validate_certs: false
+  tags:
+    - update_idmdns_server

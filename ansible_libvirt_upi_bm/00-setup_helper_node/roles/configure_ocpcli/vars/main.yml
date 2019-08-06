@@ -1,0 +1,4 @@
+---
+# vars file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_ocpcli
+oc_install_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux-{{ openshift_version }}.tar.gz
+oc_client_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-{{ openshift_version }}.tar.gz

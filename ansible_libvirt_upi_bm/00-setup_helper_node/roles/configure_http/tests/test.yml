@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_http

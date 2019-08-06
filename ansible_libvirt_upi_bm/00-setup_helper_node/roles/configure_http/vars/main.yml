@@ -1,0 +1,6 @@
+---
+# vars file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_http
+rhcos_biosimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-metal-bios.raw.gz
+rhcos_uefiimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-metal-uefi.raw.gz
+images_directory: /var/www/html/openshift4/images/
+ignitions_directory: /var/www/html/openshift4/{{ openshift_version }}/ignitions/

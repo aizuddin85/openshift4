@@ -1,0 +1,23 @@
+apiVersion: v1
+baseDomain: {{ network_domain }}
+compute:
+- hyperthreading: Enabled
+  name: worker
+  replicas: 0
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: {{ groups['ocp4_master_vm'] | length - 1 }}
+metadata:
+  name: {{ openshift_domain }}
+networking:
+  clusterNetworks:
+  - cidr: {{ openshift_clusternet }}
+    hostPrefix: {{ openshift_clusternetprefix }}
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - {{ openshift_servicenet }}
+platform:
+  none: {}
+pullSecret: '{{ redhat_pull_secret }}'
+sshKey: '{{ core_ssh_publickey }}'

@@ -1,0 +1,10 @@
+---
+# vars file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_selinux
+allowed_http_port_t:
+    - 22623
+    - 6443
+    - 32700 
+    - 5001
+    - 5002
+    - 5003
+    - 5004

@@ -1,0 +1,21 @@
+---
+- name: Clean up DNS records
+  vars:
+    dns_a_zone: bytewise.com.my
+    dns_ptr_zone: 50.168.192.in-addr.arpa
+    ipa_host: idm.bytewise.com.my
+    ipa_user: admin
+    ldap_uri: ldap://idm.bytewise.com.my/
+    ldap_bind: uid=admin,cn=users,cn=accounts,dc=bytewise,dc=com,dc=my
+    ldap_dns_srv_dn: idnsname=_etcd-server-ssl._tcp.ocp4,idnsname=bytewise.com.my.,cn=dns,dc=bytewise,dc=com,dc=my
+  vars_prompt:
+    - name: ipa_password
+      prompt: "Please enter admin password for IdM"
+      private: yes
+    - name: ldap_password
+      prompt: "Please enter ldap password for bind user"
+      private: yes
+  hosts: all
+  gather_facts: false
+  roles:
+    - configure_idmdns

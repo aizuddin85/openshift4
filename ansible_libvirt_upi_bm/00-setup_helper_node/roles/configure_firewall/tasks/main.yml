@@ -1,0 +1,17 @@
+---
+# tasks file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_firewall
+- name: Allowing firewall rules for services
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  with_items: "{{ allowed_services }}"
+
+- name: Allowing firewall rules for ports
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  with_items: "{{ allowed_ports }}"

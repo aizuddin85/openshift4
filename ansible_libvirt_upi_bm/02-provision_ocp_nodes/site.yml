@@ -1,0 +1,22 @@
+---
+- name: Preparing and Configuring DHCP and PXE Configs
+  become: true
+  hosts: helper_vm
+  gather_facts: false
+  roles:
+    - configure_dhcpconfig
+    - configure_pxeconfig
+    - configure_lbconfig
+    - configure_ignitionfiles
+
+- name: Preparing and Deploying VM on Libvirt
+  become: true
+  vars:
+    libvirt_storage_pool:
+      - default
+      - fastdisk
+  hosts: all
+  gather_facts: false
+  roles:
+    - configure_storage
+    - deploy_ocpvms

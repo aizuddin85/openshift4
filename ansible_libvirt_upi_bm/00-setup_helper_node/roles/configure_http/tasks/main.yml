@@ -1,0 +1,58 @@
+---
+# tasks file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_http
+- name: Create web hosting directory for images and ignitions file
+  file:
+    path: "{{ item }}"
+    state: directory
+  tags:
+      - configure_http_server
+  with_items:
+    - "{{ images_directory }}"
+    - "{{ ignitions_directory }}"
+
+- name: Downloading RHCOS 4.1.0 OS BIOS image
+  get_url:
+    url: "{{ rhcos_biosimg_url }}"
+    dest: "{{ images_directory }}"
+    timeout: 300
+    validate_certs: false
+  when: biossetup
+  tags:
+      - configure_http_server
+      - download_rhcos_image
+
+- name: Downloading RHCOS 4.1.0 OS UEFI image
+  get_url:
+    url: "{{ rhcos_biosimg_url }}"
+    dest: "{{ images_directory }}"
+    timeout: 300
+    validate_certs: false
+  when: uefisetup
+  tags:
+      - configure_http_server
+      - download_rhcos_image
+
+- name: Restoring SELinux fscontext
+  shell: restorecon -RFv "{{ item }}"
+  tags:
+      - configure_http_server
+  with_items:
+    - "{{ images_directory }}"
+    - "{{ ignitions_directory }}"
+
+- name: Configure http to listen to 8080
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Listen 80'
+    line: 'Listen 8080'
+  changed_when: True
+  tags:
+    - configure_http_server
+
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
+  tags:
+    - configure_http_server

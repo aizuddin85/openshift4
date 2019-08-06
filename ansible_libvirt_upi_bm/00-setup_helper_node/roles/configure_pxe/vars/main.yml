@@ -1,0 +1,6 @@
+---
+# vars file for ../ansible_libvirt_upi_bm/setup_helper_node/roles/configure_pxe
+pxe_image_directory: /var/lib/tftpboot/openshift4/4.1.0
+pxe_boot_direcotry: /var/lib/tftpboot/pxelinux.cfg
+rhcos_kernel_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-installer-kernel
+rhcos_initramfs_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-installer-initramfs.img

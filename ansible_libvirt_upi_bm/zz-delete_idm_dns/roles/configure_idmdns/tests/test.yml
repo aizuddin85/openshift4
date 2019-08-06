@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - 01-setup_idm_dns/roles/configure_idmdns
