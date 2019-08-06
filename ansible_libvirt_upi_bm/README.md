@@ -66,7 +66,9 @@ A. This node already installed (RHEL 7 or RHEL 8, I`m using RHEL 8) and basic OS
 B. To execute this playbook (with become sudo):
 ```
 #> cd 00-setup_helper_node
-#> ansible-playbook -i ../inventory  site.yml  -K --ask-vault-pass
+#> ansible-playbook -i ../inventory  site.yml  -K --ask-vault-pass   -b
+BECOME password: 
+Vault password: 
 ```
 
 What this will do:
@@ -103,3 +105,12 @@ To execute this playbook (as localhost on Libvirt host):
 This playbook do below clean up:
 * Stop and remove all OCP node (not Helper node).
 * Clean up storage from provisioned play above.
+
+To execute VM clean up:
+
+```
+#> cd zz-delete_ocpvm
+#> ansible-playbook -i ../inventory  site.yml  -K --ask-vault-pass   -b
+BECOME password: 
+Vault password: 
+```
