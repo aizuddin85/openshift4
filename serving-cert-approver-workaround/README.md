@@ -17,6 +17,7 @@ Pre-Req:
 Building base UBI8 image with OC client downloaded. 
 
 ```
+#> git clone https://github.com/aizuddin85/openshift4.git
 #> cd serving-cert-approver-workaround
 #> buildah build-using-dockerfile  .
 ```
