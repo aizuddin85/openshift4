@@ -1,11 +1,8 @@
 # OCP 4 UPI Baremetal
 ## Node Serving Certificate CSR Approver CronJob
 
-<<<<<<< HEAD
 **THIS CRON SCRIPT WILL SKIP "NODE-BOOTSTRAPPER" CSR APPROVAL REQUEST**
-=======
-**BE CAREFUL, ONLY USE THIS WHEN YOUR ENVIRONMENT ARE SECURED AND CONTROLLED SINCE THIS CRON APPROVED CSR UNCONDITIONALLY**
->>>>>>> ea42e3d8e60a7f6ebf1fcc55c9e8e967d290e03b
+
 
 **NOTE:** This is community effort, and provided as-is without any support for such.
 
