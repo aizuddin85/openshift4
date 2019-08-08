@@ -16,10 +16,6 @@ spec:
           creationTimestamp: null
         spec:
           volumes:
-            - name: kubeconfig
-              secret:
-                secretName: kubeadmin
-                defaultMode: 420
             - name: script
               configMap:
                  name: script
