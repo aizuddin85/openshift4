@@ -1,0 +1,54 @@
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: node-serving-cert-approver-cronjob
+  namespace: serving-cert-approver-workaround
+spec:
+  schedule: '1 * * * *'
+  concurrencyPolicy: Allow
+  suspend: false
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          volumes:
+            - name: kubeconfig
+              secret:
+                secretName: kubeadmin
+                defaultMode: 420
+            - name: script
+              configMap:
+                 name: script
+                 defaultMode: 0750
+          containers:
+            - resources: {}
+              terminationMessagePath: /dev/termination-log
+              name: serving-cert-approver
+              env:
+                - name: KUBECONFIG
+                  value: /etc/kubeconfig/kubeconfig
+              volumeMounts:
+                - name: kubeconfig
+                  mountPath: /etc/kubeconfig
+                - name: script
+                  mountPath: /approver
+              terminationMessagePolicy: File
+              image: >-
+                image-registry.openshift-image-registry.svc:5000/openshift/oclientubi8:latest
+              imagePullPolicy: IfNotPresent
+              args:
+                - /bin/sh
+                - '-c'
+                - /approver/approver.sh
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
