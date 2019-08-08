@@ -11,6 +11,7 @@ NOTE: This is community effor, and provided as-is without any support for such.
 
 Pre-Req:
 * Buildah 
+* Podman
 
 Building base UBI8 image with OC client downloaded. 
 
