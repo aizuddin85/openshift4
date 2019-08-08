@@ -8,7 +8,7 @@
 
 ## 1. Create project to host this cronjob
 ```
-#> oc create-project serving-cert-approver-workaround
+#> oc new-project serving-cert-approver-workaround
 ```
 
 ## 2. Build & Push Image
