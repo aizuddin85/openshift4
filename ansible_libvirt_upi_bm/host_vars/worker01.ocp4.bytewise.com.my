@@ -1,4 +1,4 @@
-vm_disktype: "fast"
+vm_disktype: "slow"
 vm_disksize: 40G
 vm_macaddress: "52:54:00:7d:2d:14"
 vm_ipaddress: "192.168.50.144"
