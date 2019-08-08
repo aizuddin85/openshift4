@@ -69,3 +69,8 @@ We now can defined the cronjob, this YAML defined a job that will run once per h
 ```
 #> oc create -f cronjob.yaml -n serving-cert-approver-workaround
 ```
+
+Example of succesful run:
+
+![alt text](https://github.com/aizuddin85/openshift4/blob/master/serving-cert-approver-workaround/Assets/example1.png)
+
