@@ -23,8 +23,8 @@ spec:
           containers:
             - resources:
                 limits:
-                  memory: '128Mi'
-                  cpu: '80m'
+                  memory: '256Mi'
+                  cpu: '100m'
               terminationMessagePath: /dev/termination-log
               name: serving-cert-approver
               volumeMounts:
