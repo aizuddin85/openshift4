@@ -21,7 +21,7 @@ Building base UBI8 image with OC client downloaded.
 
 ```
 #> git clone https://github.com/aizuddin85/openshift4.git
-#> cd serving-cert-approver-workaround
+#> cd openshift4/serving-cert-approver-workaround
 #> buildah build-using-dockerfile  .
 ```
 
@@ -36,7 +36,7 @@ Tag image to the OCP 4 registry:
 
 Create clusterrole and clusterrolebinding just to allow CSR list and approval.
 ```
-#> cd serving-cert-approver-workaround
+#> cd openshift4/serving-cert-approver-workaround
 #> oc create -f rbac.yaml
 clusterrole.rbac.authorization.k8s.io/signer-workaround created
 clusterrolebinding.rbac.authorization.k8s.io/signer-workaround created
@@ -54,7 +54,7 @@ clusterrole.rbac.authorization.k8s.io/signer-workaround added: "signer"
 
 Create script configMap,
 ```
-#> cd serving-cert-approver-workaround
+#> cd openshift4/serving-cert-approver-workaround
 #> oc create configmap script --from-file=approver.sh -n serving-cert-approver-workaround
 ```
 
@@ -68,6 +68,7 @@ At this stage where we have:
 We now can defined the cronjob, this YAML defined a job that will run once per hour:
 
 ```
+#> cd openshift4/serving-cert-approver-workaround
 #> oc create -f cronjob.yaml -n serving-cert-approver-workaround
 ```
 
