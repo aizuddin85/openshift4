@@ -21,7 +21,10 @@ spec:
                  name: script
                  defaultMode: 0750
           containers:
-            - resources: {}
+            - resources:
+                limits:
+                  memory: '128Mi'
+                  cpu: '80m'
               terminationMessagePath: /dev/termination-log
               name: serving-cert-approver
               volumeMounts:
