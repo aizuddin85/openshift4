@@ -72,7 +72,10 @@ We now can defined the cronjob, this YAML defined a job that will run once per h
 #> oc create -f cronjob.yaml -n serving-cert-approver-workaround
 ```
 
-Example of succesful run:
+Example of node-bootstrap skipped for approval:
 
-![alt text](https://github.com/aizuddin85/openshift4/blob/master/serving-cert-approver-workaround/Assets/example1.png)
+![alt text](https://github.com/aizuddin85/openshift4/blob/master/serving-cert-approver-workaround/Assets/bootstrapreq.png)
 
+
+Example of Node serving certificate CSR being approved:
+![alt text](https://github.com/aizuddin85/openshift4/blob/master/serving-cert-approver-workaround/Assets/nodecsr.png)
