@@ -1,14 +1,21 @@
 echo "Logged-in as: `oc whoami`"
 
 csrcount=`oc get csr | grep -i Pending |wc -l`
+pendingcsr=`oc get csr | grep -i Pending  | awk '{print $1}'`
 
 if [ $csrcount -gt 0 ]
 then
   echo "Listing all Pending CSRs..."
   oc get csr | grep Pending
+  echo "Approving only Node Serving Certificate CSR, please approve node-bootstrapper manually..."
 
-  echo "Approving CSR unconditionally..."
-  oc adm certificate approve `oc get csr -o name`
+  for csr in $pendingcsr; do
+    if [[ `oc get csr  -o  custom-columns=:.spec.username $csr` == "*node-bootstrapper*" ]]; then
+  	  echo "Detected $csr as bootstrap request, please approve manually once verified..."
+    else
+	    oc adm certificate approve `oc get csr -o name $csr`
+    fi
+  done  
 else
-  echo "No CSR in pending approval state..."
+  echo "No Node Serving Certificate CSR in pending approval state..."
 fi
