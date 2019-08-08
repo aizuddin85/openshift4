@@ -1,6 +1,7 @@
-# OCP 4 UPI Baremetal: Node Serving Certificate CSR Approver CronJob
+# OCP 4 UPI Baremetal
+## Node Serving Certificate CSR Approver CronJob
 
-NOTE: This is community effor, and provided as-is without any support for such.
+NOTE: This is community effort, and provided as-is without any support for such.
 
 ## 1. Create project to host this cronjob
 ```
