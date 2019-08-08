@@ -1,7 +1,11 @@
 # OCP 4 UPI Baremetal
 ## Node Serving Certificate CSR Approver CronJob
 
+<<<<<<< HEAD
 **THIS CRON SCRIPT WILL SKIP "NODE-BOOTSTRAPPER" CSR APPROVAL REQUEST**
+=======
+**BE CAREFUL, ONLY USE THIS WHEN YOUR ENVIRONMENT ARE SECURED AND CONTROLLED SINCE THIS CRON APPROVED CSR UNCONDITIONALLY**
+>>>>>>> ea42e3d8e60a7f6ebf1fcc55c9e8e967d290e03b
 
 **NOTE:** This is community effort, and provided as-is without any support for such.
 
@@ -28,10 +32,10 @@ Tag image to the OCP 4 registry:
 ```
 #> HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
 #> podman login -u $(oc whoami) -p $(oc whoami -t) --tls-verify=false $HOST 
-#> buildah tag 8ff88db8565b default-route-openshift-image-registry.<ocp4_route_domain>/openshift/oclientubi8:latest
+#> buildah tag <BUILT IMAGE TAG> default-route-openshift-image-registry.<ocp4_route_domain>/openshift/oclientubi8:latest
 #> buildah push default-route-openshift-image-registry.<ocp4_route_domain>/openshift/oclientubi8:latest
 ```
-## Prepare RBAC and ServiceAccount
+## 3. Prepare RBAC and ServiceAccount
 
 Create clusterrole and clusterrolebinding just to allow CSR list and approval.
 ```
@@ -69,3 +73,8 @@ We now can defined the cronjob, this YAML defined a job that will run once per h
 ```
 #> oc create -f cronjob.yaml -n serving-cert-approver-workaround
 ```
+
+Example of succesful run:
+
+![alt text](https://github.com/aizuddin85/openshift4/blob/master/serving-cert-approver-workaround/Assets/example1.png)
+
