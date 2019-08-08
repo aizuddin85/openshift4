@@ -5,3 +5,4 @@
   roles:
     - cleanup_pxeconfig
     - undefine_ocpvms
+    - cleanup_storage
