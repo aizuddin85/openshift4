@@ -28,10 +28,10 @@ Tag image to the OCP 4 registry:
 ```
 #> HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
 #> podman login -u $(oc whoami) -p $(oc whoami -t) --tls-verify=false $HOST 
-#> buildah tag 8ff88db8565b default-route-openshift-image-registry.<ocp4_route_domain>/openshift/oclientubi8:latest
+#> buildah tag <BUILT IMAGE TAG> default-route-openshift-image-registry.<ocp4_route_domain>/openshift/oclientubi8:latest
 #> buildah push default-route-openshift-image-registry.<ocp4_route_domain>/openshift/oclientubi8:latest
 ```
-## Prepare RBAC and ServiceAccount
+## 3. Prepare RBAC and ServiceAccount
 
 Create clusterrole and clusterrolebinding just to allow CSR list and approval.
 ```
