@@ -20,3 +20,4 @@
   roles:
     - configure_storage
     - deploy_ocpvms
+ 

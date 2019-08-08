@@ -1,6 +1,8 @@
 # OCP 4 UPI Baremetal
 ## Node Serving Certificate CSR Approver CronJob
 
+** BE CAREFUL, ONLY USE THIS WHEN YOUR ENVIRONMENT IS SECURED AND CONTROLLED SINCE THIS CRON APPROVED CSR UNCONDITIONALLY **
+
 **NOTE:** This is community effort, and provided as-is without any support for such.
 
 ## 1. Create project to host this cronjob
@@ -29,17 +31,25 @@ Tag image to the OCP 4 registry:
 #> buildah tag 8ff88db8565b default-route-openshift-image-registry.<ocp4_route_domain>/openshift/oclientubi8:latest
 #> buildah push default-route-openshift-image-registry.<ocp4_route_domain>/openshift/oclientubi8:latest
 ```
+## Prepare RBAC and ServiceAccount
 
-## 3. Prepare secret and configMaps
-
-In this case, I`m using kubeconfig generated during the installation and script to execute the command. This will be mounted on the pod running the job later.
-
-**NOTE:** The better practise is to use serviceaccount with proper RBAC just for approving CSR instead of kubeadmin superuser.
-
-Create kubeconfig secret,
+Create clusterrole and clusterrolebinding just to allow CSR list and approval.
 ```
-#> oc create secret generic kubeadmin --from-file=kubeconfig -n serving-cert-approver-workaround
+#> cd serving-cert-approver-workaround
+#> oc create -f rbac.yaml
+clusterrole.rbac.authorization.k8s.io/signer-workaround created
+clusterrolebinding.rbac.authorization.k8s.io/signer-workaround created
 ```
+
+Assign cluster role to service account.
+```
+#> oc create serviceaccount signer -n serving-cert-approver-workaround
+#> oc adm  policy  add-cluster-role-to-user  signer-workaround -z signer
+clusterrole.rbac.authorization.k8s.io/signer-workaround added: "signer"
+```
+
+## 4. Prepare configMaps that contains the script
+
 
 Create script configMap,
 ```
@@ -47,7 +57,7 @@ Create script configMap,
 #> oc create configmap script --from-file=approver.sh -n serving-cert-approver-workaround
 ```
 
-## 4. Create a OpenShift cronjob
+## 5. Create a OpenShift cronjob
 
 At this stage where we have:
 * Image

@@ -6,6 +6,7 @@ master03.ocp4.bytewise.com.my
 worker01.ocp4.bytewise.com.my
 worker02.ocp4.bytewise.com.my
 worker03.ocp4.bytewise.com.my
+worker04.ocp4.bytewise.com.my
 
 [ocp4_bootstrap_vm]
 bootstrap.ocp4.bytewise.com.my
@@ -20,6 +21,7 @@ master03.ocp4.bytewise.com.my
 worker01.ocp4.bytewise.com.my
 worker02.ocp4.bytewise.com.my
 worker03.ocp4.bytewise.com.my
+worker04.ocp4.bytewise.com.my
 
 [helper_vm]
 bastion4.bytewise.com.my

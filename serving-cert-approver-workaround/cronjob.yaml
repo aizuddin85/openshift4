@@ -28,12 +28,7 @@ spec:
             - resources: {}
               terminationMessagePath: /dev/termination-log
               name: serving-cert-approver
-              env:
-                - name: KUBECONFIG
-                  value: /etc/kubeconfig/kubeconfig
               volumeMounts:
-                - name: kubeconfig
-                  mountPath: /etc/kubeconfig
                 - name: script
                   mountPath: /approver
               terminationMessagePolicy: File
@@ -49,6 +44,6 @@ spec:
           dnsPolicy: ClusterFirst
           securityContext: {}
           schedulerName: default-scheduler
-  successfulJobsHistoryLimit: 3
-  failedJobsHistoryLimit: 1
-
+          serviceAccount: signer
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 10

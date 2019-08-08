@@ -3,6 +3,7 @@
 allowed_services:
     - dhcp
     - tftp
+    - tftp-client
     - http
     - https
     - dns
