@@ -1,7 +1,7 @@
 # OCP 4 UPI Baremetal
 ## Node Serving Certificate CSR Approver CronJob
 
-NOTE: This is community effort, and provided as-is without any support for such.
+**NOTE:** This is community effort, and provided as-is without any support for such.
 
 ## 1. Create project to host this cronjob
 ```
@@ -33,7 +33,7 @@ Tag image to the OCP 4 registry:
 
 In this case, I`m using kubeconfig generated during the installation and script to execute the command. This will be mounted on the pod running the job later.
 
-NOTE: The better practise is to use serviceaccount with proper RBAC just for approving CSR instead of kubeadmin superuser.
+**NOTE:** The better practise is to use serviceaccount with proper RBAC just for approving CSR instead of kubeadmin superuser.
 
 Create kubeconfig secret,
 ```
