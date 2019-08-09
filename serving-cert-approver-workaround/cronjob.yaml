@@ -5,7 +5,7 @@ metadata:
   namespace: serving-cert-approver-workaround
 spec:
   schedule: '1 * * * *'
-  concurrencyPolicy: Allow
+  concurrencyPolicy: Forbid
   suspend: false
   jobTemplate:
     metadata:
