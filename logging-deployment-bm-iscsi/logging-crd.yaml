@@ -1,0 +1,226 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: "2019-08-15T14:53:26Z"
+  generation: 1
+  name: clusterloggings.logging.openshift.io
+  resourceVersion: "51115"
+  selfLink: /apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions/clusterloggings.logging.openshift.io
+  uid: 6fca8960-bf6c-11e9-a1a2-5254007d2d12
+spec:
+  conversion:
+    strategy: None
+  group: logging.openshift.io
+  names:
+    kind: ClusterLogging
+    listKind: ClusterLoggingList
+    plural: clusterloggings
+    singular: clusterlogging
+  scope: Namespaced
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          description: Specification of the desired behavior of the Logging cluster.
+          properties:
+            collection:
+              description: Specification of the Collection component for the cluster
+              properties:
+                logs:
+                  description: Specification of Log Collection for the cluster
+                  properties:
+                    fluentd:
+                      description: Specification of the Fluentd Log Collection component
+                      properties:
+                        nodeSelector:
+                          description: Define which Nodes the Pods are scheduled on.
+                          type: object
+                        resources:
+                          description: The resource requirements for Fluentd
+                          properties:
+                            limits:
+                              description: 'Limits describes the maximum amount of
+                                compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                              type: object
+                            requests:
+                              description: 'Requests describes the minimum amount
+                                of compute resources required. If Requests is omitted
+                                for a container, it defaults to Limits if that is
+                                explicitly specified, otherwise to an implementation-defined
+                                value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                              type: object
+                    type:
+                      description: The type of Log Collection to configure
+                      type: string
+                  required:
+                  - type
+            curation:
+              description: Specification of the Curation component for the cluster
+              properties:
+                curator:
+                  description: The specification of curation to configure
+                  properties:
+                    nodeSelector:
+                      description: Define which Nodes the Pods are scheduled on.
+                      type: object
+                    resources:
+                      description: The resource requirements for Curator
+                      properties:
+                        limits:
+                          description: 'Limits describes the maximum amount of compute
+                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                        requests:
+                          description: 'Requests describes the minimum amount of compute
+                            resources required. If Requests is omitted for a container,
+                            it defaults to Limits if that is explicitly specified,
+                            otherwise to an implementation-defined value. More info:
+                            https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                    schedule:
+                      description: The cron schedule that the Curator job is run.
+                        Defaults to "30 3 * * *"
+                      type: string
+                  required:
+                  - schedule
+                type:
+                  description: The kind of curation to configure
+                  type: string
+              required:
+              - type
+            logStore:
+              description: Specification of the Log Storage component for the cluster
+              properties:
+                elasticsearch:
+                  description: Specification of the Elasticsearch Log Store component
+                  properties:
+                    nodeCount:
+                      description: Number of nodes to deploy for Elasticsearch
+                      format: int32
+                      type: integer
+                    nodeSelector:
+                      description: Define which Nodes the Pods are scheduled on.
+                      type: object
+                    redundancyPolicy:
+                      description: The policy towards data redundancy to specify the
+                        number of redundant primary shards
+                      enum:
+                      - FullRedundancy
+                      - MultipleRedundancy
+                      - SingleRedundancy
+                      - ZeroRedundancy
+                      type: string
+                    resources:
+                      description: The resource requirements for Kibana
+                      properties:
+                        limits:
+                          description: 'Limits describes the maximum amount of compute
+                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                        requests:
+                          description: 'Requests describes the minimum amount of compute
+                            resources required. If Requests is omitted for a container,
+                            it defaults to Limits if that is explicitly specified,
+                            otherwise to an implementation-defined value. More info:
+                            https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                    storage:
+                      description: The storage specification for Elasticsearch data
+                        nodes
+                      properties:
+                        size:
+                          description: The capacity of storage to provision.
+                          type: string
+                        storageClassName:
+                          description: 'The class of storage to provision. More info:
+                            https://kubernetes.io/docs/concepts/storage/storage-classes/'
+                          type: string
+                  required:
+                  - nodeCount
+                type:
+                  description: The type of Log Storage to configure
+                  type: string
+              required:
+              - type
+            managementState:
+              description: Indicator if the resource is 'Managed' or 'Unmanaged' by
+                the operator
+              enum:
+              - Managed
+              - Unmanaged
+              type: string
+            visualization:
+              description: Specification of the Visualization component for the cluster
+              properties:
+                kibana:
+                  description: Specification of the Kibana Visualization component
+                  properties:
+                    nodeSelector:
+                      description: Define which Nodes the Pods are scheduled on.
+                      type: object
+                    proxySpec:
+                      description: Specification of the Kibana Proxy component
+                      properties:
+                        resources:
+                          description: The resource requirements for Kibana
+                          properties:
+                            limits:
+                              description: 'Limits describes the maximum amount of
+                                compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                              type: object
+                            requests:
+                              description: 'Requests describes the minimum amount
+                                of compute resources required. If Requests is omitted
+                                for a container, it defaults to Limits if that is
+                                explicitly specified, otherwise to an implementation-defined
+                                value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                              type: object
+                    replicas:
+                      description: Number of instances to deploy for a Kibana deployment
+                      format: int32
+                      type: integer
+                    resources:
+                      description: The resource requirements for Kibana
+                      properties:
+                        limits:
+                          description: 'Limits describes the maximum amount of compute
+                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                        requests:
+                          description: 'Requests describes the minimum amount of compute
+                            resources required. If Requests is omitted for a container,
+                            it defaults to Limits if that is explicitly specified,
+                            otherwise to an implementation-defined value. More info:
+                            https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                  required:
+                  - replicas
+                type:
+                  description: The type of Visualization to configure
+                  type: string
+              required:
+              - type
+  version: v1
+  versions:
+  - name: v1
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ClusterLogging
+    listKind: ClusterLoggingList
+    plural: clusterloggings
+    singular: clusterlogging
+  conditions:
+  - lastTransitionTime: "2019-08-15T14:53:26Z"
+    message: no conflicts found
+    reason: NoConflicts
+    status: "True"
+    type: NamesAccepted
+  - lastTransitionTime: null
+    message: the initial names have been accepted
+    reason: InitialNamesAccepted
+    status: "True"
+    type: Established
+  storedVersions:
+  - v1
