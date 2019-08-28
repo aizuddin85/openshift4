@@ -13,7 +13,7 @@ then
     if [[ `oc get csr  -o  custom-columns=:.spec.username $csr` == *"node-bootstrapper"* ]]; then
   	  echo "Detected $csr as bootstrap request, skipping, please approve manually ..."
     else
-	  oc adm certificate approve `oc get csr -o name $csr`
+	  oc adm certificate approve $csr
     fi
   done  
 else
