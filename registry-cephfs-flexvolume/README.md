@@ -11,12 +11,16 @@ This guide as an example how we can use CephFS as flexVolume persistent volume t
 
 ``` oc create -f restricted_flexVolume_scc.yaml```
 
-2. Create cephfs CR
+2. Create cephfs CR  
+
 ```oc create -f cephfs-object.yaml```
 
-3. Create PV for image registry PVC
+3. Create PV for image registry PVC  
+
 ``` oc create -f registry-cephfs-flex-volume-rwx.yaml```
 
+4. Example output:
+  
 ```
 mzali@mzali-fedora.redhat.com:~ $ oc get pvc
 NAME                     STATUS   VOLUME                 CAPACITY   ACCESS MODES   STORAGECLASS      AGE
