@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: registry-ceph-flexVolume 
+  name: registry-ceph-flexvolume 
 spec:
   capacity:
     storage: 100Gi 
