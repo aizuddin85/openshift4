@@ -6,7 +6,7 @@ spec:
   capacity:
     storage: 100Gi 
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   flexVolume:
     driver: ceph.rook.io/rook 
     fsType: "ceph" 
