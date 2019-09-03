@@ -2,6 +2,14 @@
 
 ## Introduction
 
+#Pre-Req
+* Ansible Core 2.8
+* python-ldap (or python3-ldap depends on your setup)
+* Update VM template corresponding to your host capabilities. (02-provision_ocp_nodes/roles/deploy_ocpvms/templates/machine-template.xml.j2)
+* Pull secret 
+* Core user ssh public key
+* DNS Configured (i`m using IdM as DNS server under 01-setup_idm_dns)
+
 There are four main parts in this playbook.
 
   * 1. Prepare & Configure Helper Node (DNS is out of scope).  
@@ -16,30 +24,30 @@ All variables are stored in `group_vars` directory as much as possible with vaul
 An inventory file should look like this with groups:
 ```
 [ocp4_nodes] # All OCP4 Nodes
-bootstrap.ocp4.bytewise.com.my
-master01.ocp4.bytewise.com.my
-master02.ocp4.bytewise.com.my
-master03.ocp4.bytewise.com.my
-worker01.ocp4.bytewise.com.my
-worker02.ocp4.bytewise.com.my
-worker03.ocp4.bytewise.com.my
+bootstrap.ocp4.local.bytewise.my
+master01.ocp4.local.bytewise.my
+master02.ocp4.local.bytewise.my
+master03.ocp4.local.bytewise.my
+worker01.ocp4.local.bytewise.my
+worker02.ocp4.local.bytewise.my
+worker03.ocp4.local.bytewise.my
 
 [ocp4_bootstrap_vm] # OCP4 Bootstrap Node
-bootstrap.ocp4.bytewise.com.my
+bootstrap.ocp4.local.bytewise.my
 
 [ocp4_master_vm] # OCP4 Master Node
-bootstrap.ocp4.bytewise.com.my
-master01.ocp4.bytewise.com.my
-master02.ocp4.bytewise.com.my
-master03.ocp4.bytewise.com.my
+bootstrap.ocp4.local.bytewise.my
+master01.ocp4.local.bytewise.my
+master02.ocp4.local.bytewise.my
+master03.ocp4.local.bytewise.my
 
 [ocp4_worker_vm] # OCP4 Worker Node 
-worker01.ocp4.bytewise.com.my
-worker02.ocp4.bytewise.com.my
-worker03.ocp4.bytewise.com.my
+worker01.ocp4.local.bytewise.my
+worker02.ocp4.local.bytewise.my
+worker03.ocp4.local.bytewise.my
 
 [helper_vm] # Helper Node, not OCP4 node.
-bastion4.bytewise.com.my # Should only be stated here, not everywhere else!
+bastion4.bytewise.my # Should only be stated here, not everywhere else!
 ```
 
 ### 2. Variables
@@ -68,9 +76,8 @@ A. This node already installed (RHEL 7 or RHEL 8, I`m using RHEL 8) and basic OS
 B. To execute this playbook (with become sudo):
 ```
 #> cd 00-setup_helper_node
-#> ansible-playbook -i ../inventory  site.yml  -K --ask-vault-pass   -b
+#> ansible-playbook -i ../inventory  site.yml  -u root -K  -b
 BECOME password: 
-Vault password: 
 ```
 
 What this will do:
@@ -98,7 +105,11 @@ To execute this playbook (as localhost on Libvirt host):
 
 ```
 #> cd 02-provision_ocp_nodes
-#> ansible-playbook -i ../inventory  site.yml  -K --ask-vault-pass
+#> ansible-playbook  -i ../inventory  site.yml  -u root -K -b
+BECOME password: 
+Pull secret from cloud.redhat.com: {"auths":{"cloud.openshift.com":......redhat.com"}}}
+Core SSH Public key: ssh-rsa ......redhat.com
+
 ```
 
 
@@ -112,7 +123,6 @@ To execute VM clean up:
 
 ```
 #> cd zz-delete_ocpvm
-#> ansible-playbook -i ../inventory  site.yml  -K --ask-vault-pass   -b
+#> ansible-playbook  -i ../inventory  site.yml  -u root -K -b
 BECOME password: 
-Vault password: 
 ```

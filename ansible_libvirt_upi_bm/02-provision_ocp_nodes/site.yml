@@ -8,16 +8,21 @@
     - configure_pxeconfig
     - configure_lbconfig
     - configure_ignitionfiles
-
+  vars_prompt:
+    - name: redhat_pull_secret
+      prompt: "Pull secret from cloud.redhat.com"
+      private: no
+    - name: core_ssh_publickey
+      prompt: "Core SSH Public key"
+      private: no
 - name: Preparing and Deploying VM on Libvirt
   become: true
   vars:
     libvirt_storage_pool:
-      - default
-      - fastdisk
+      - nvme-images
+      - ssd-images
   hosts: all
   gather_facts: false
   roles:
     - configure_storage
     - deploy_ocpvms
- 

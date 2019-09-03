@@ -164,7 +164,7 @@
     state: present
     server_uri: '{{ ldap_uri }}'
     bind_dn: '{{ ldap_bind }}'
-    bind_pw: '{{ ldap_password }}'
+    bind_pw: '{{ ipa_password }}'
     validate_certs: false
     objectClass:
       - top
@@ -181,7 +181,7 @@
     values: ["0 10 2380 etcd-0.ocp4", "0 10 2380 etcd-1.ocp4", "0 10 2380 etcd-2.ocp4"]
     server_uri: '{{ ldap_uri }}'
     bind_dn: '{{ ldap_bind }}'
-    bind_pw: '{{ ldap_password }}'
+    bind_pw: '{{ ipa_password }}'
     validate_certs: false
   tags:
     - update_idmdns_server
