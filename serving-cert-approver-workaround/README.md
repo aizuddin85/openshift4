@@ -10,6 +10,8 @@
 ```
 #> oc new-project serving-cert-approver-workaround
 ```
+## 2. Create a pull secret to pull from registry.redhat.io
+
 
 ## 2. Build & Push Image
 
