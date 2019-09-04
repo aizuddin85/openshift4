@@ -9,7 +9,7 @@ ENV OC_VERSION "4.1.9"
 
 
 # install the oc client tools
-ADD https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-$OC_VERSION.tar.gz /usr/bin/openshift-client-linux-$OC_VERSION.tar.gz
+ADD https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OC_VERSION/openshift-client-linux-$OC_VERSION.tar.gz /usr/bin/openshift-client-linux-$OC_VERSION.tar.gz
 RUN tar -xzvf  /usr/bin/openshift-client-linux-$OC_VERSION.tar.gz  -C /usr/bin && \
     chmod +x /usr/bin/oc
    
