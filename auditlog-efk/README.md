@@ -7,6 +7,6 @@ oc delete pod -l component=fluentd -n openshift-logging
 `Management -> Index Patterns -> Create Index Pattern -> Enter ".audit" in the Index Pattern. `
 
 
-References:
+References:  
 [1]: https://github.com/rbo/openshift-examples/tree/master/efk-auditlog  
 [2]: https://austindewey.com/2018/10/17/integrating-advanced-audit-with-aggregated-logging-in-openshift-3-11/
