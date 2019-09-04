@@ -32,7 +32,7 @@ spec:
                   mountPath: /approver
               terminationMessagePolicy: File
               image: >-
-                image-registry.openshift-image-registry.svc:5000/openshift/oclientubi8:latest
+                image-registry.openshift-image-registry.svc:5000/serving-cert-approver-workaround/oclientubi8:latest
               imagePullPolicy: IfNotPresent
               args:
                 - /bin/sh
