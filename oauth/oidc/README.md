@@ -42,7 +42,7 @@ Create JKS for RHSSO use:
 #> keytool -genseckey -alias jgroups -storetype JCEKS -keystore jgroups.jceks -storepass ${SECRETS_KEYSTORE_PASSWORD}
 ```
 
-3. Create new project and associate object for RHSSO:
+* 3. Create new project and associate object for RHSSO:
 ```
 #> oc new-project rhsso
 #> oc create serviceaccount sso-sa
@@ -52,7 +52,7 @@ Create JKS for RHSSO use:
 ```
 
 
-4. Deploy new RHSSO apps:
+* 4. Deploy new RHSSO apps:
 ```
 #> oc new-app --template=sso73-mysql-persistent \
   -p APPLICATION_NAME=sso \
@@ -74,30 +74,30 @@ Create JKS for RHSSO use:
 ```
 
 ## Configuring RHSSO OIDC
-1. Login to RHSSO via exposed HTTPS route using admin/password set above.
+* 1. Login to RHSSO via exposed HTTPS route using admin/password set above.
 
-2. Select "OpenShift" realm, add user for login test later:
+* 2. Select "OpenShift" realm, add user for login test later:
 ```
 Manage > Users > Add User > Fill in all info > Save
 ```
 
-Set password for the user. Always ensure 'Temporary' button always OFF.
+* 3.Set password for the user. Always ensure 'Temporary' button always OFF.
 ```
 Credentials > Enter New Password
 ```
 
 
-3. Create and configure OIDC Client
+* 4. Create and configure OIDC Client
 ```
 Manage > Clients > Create > Client ID as "OpenShift" > Client Protocol as "openid-connect" > Access Type as "confidential" > Valid Redirect URIs  as "https://oauth-openshift.apps.ocp4.local.bytewise.my/*"
 ```
 
-4. Get the clientSecret from the Credentials tab from above page and create as a secret:
+* 5. Get the clientSecret from the Credentials tab from above page and create as a secret:
 ```
 #>  oc create secret  generic  rhsso-oidc-secret --from-literal=clientSecret=secret_here -n openshift-config
 ```
 
-5. Configure OpenShift oAuth to include RHSSO OID:
+* 6. Configure OpenShift oAuth to include RHSSO OID:
 ```
 #> cat oauth.yaml
 apiVersion: config.openshift.io/v1
@@ -129,7 +129,7 @@ spec:
 #> oc apply -f oauth.yaml
 ```
 
-6. After the oauth pods progressing with new config, console should have new OIDC login option.
+* 7. After the oauth pods progressing with new config, console should have new OIDC login option.
 
 ## Troubleshooting
 
