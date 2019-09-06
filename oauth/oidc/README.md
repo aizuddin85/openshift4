@@ -80,7 +80,7 @@ Create JKS for RHSSO use:
 Manage > Users > Add User > Fill in all info > Save
 ```
 
-* 3.Set password for the user. Always ensure 'Temporary' button always OFF.
+* 3. Set password for the user. Always ensure '*Temporary*' button always OFF.
 ```
 Credentials > Enter New Password
 ```
