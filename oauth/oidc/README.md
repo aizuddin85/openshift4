@@ -45,10 +45,9 @@ Create JKS for RHSSO use:
 * 3. Create new project and associate object for RHSSO:
 ```
 #> oc new-project rhsso
-#> oc create serviceaccount sso-sa
 #> oc secret new sso-jgroup-secret jgroups.jceks
 #> oc secret new sso-ssl-secret sso-https.jks truststore.jks
-#> oc secrets link sso-sa sso-jgroup-secret sso-ssl-secret
+#> oc secrets link default sso-jgroup-secret sso-ssl-secret
 ```
 
 
