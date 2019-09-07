@@ -5,4 +5,4 @@ vm_ipaddress: "192.168.50.146"
 vm_network: "LocalNet50"
 vm_vcpu: 4
 vm_cpumode: "Skylake-Client"
-vm_memory_gb: 5
+vm_memory_gb: 8

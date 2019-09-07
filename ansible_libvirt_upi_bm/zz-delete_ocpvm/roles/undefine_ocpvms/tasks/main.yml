@@ -10,6 +10,6 @@
 - name: Undefine the VM
   delegate_to: localhost
   virt:
-     command: undefine
+    command: undefine
     guest: "{{ inventory_hostname }}"
   ignore_errors: true
