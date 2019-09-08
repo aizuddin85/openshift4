@@ -1,4 +1,4 @@
-[DEPRECATED SUPERSEDED BY CSI STORAGECLASS] --> Use rookio-ceph-1.1 to setup csi
+**[DEPRECATED SUPERSEDED BY CSI STORAGECLASS]** --> Use rookio-ceph-1.1 to setup csi
 #  Introduction
 
 Pre-Req:
