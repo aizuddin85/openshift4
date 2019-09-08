@@ -1,0 +1,194 @@
+---
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  name: serving-cert-approver-workaround
+spec: {}
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  name: ubi8
+  namespace: openshift
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations: null
+    from:
+      kind: DockerImage
+      name: registry.redhat.io/ubi8/ubi:latest
+    generation: 1
+    importPolicy: {}
+    name: latest
+    referencePolicy:
+      type: Source
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: oclientubi8
+  namespace: serving-cert-approver-workaround
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations: null
+    generation: 1
+    importPolicy: {}
+    name: latest
+    referencePolicy:
+      type: Source
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    name: docker-build
+  name: docker-build
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: oclientubi8:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: serving-cert-approver-workaround
+    git:
+      uri: https://github.com/aizuddin85/openshift4.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+      env:
+      - name: OC_VERSION
+        value: 4.1.13
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: secret101
+    type: GitHub
+  - type: ConfigChange
+  - imageChange:
+      from:
+        kind: ImageStreamTag
+        name: oclientubi8:latest
+        namespace: openshift
+    type: ImageChange
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: signer
+  namespace: serving-cert-approver-workaround
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: signer-workaround
+rules:
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests
+  verbs:
+  - update
+  - list
+  - watch
+  - get
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests/approval
+  verbs:
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: signer-workaround
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: signer-workaround
+subjects:
+- kind: ServiceAccount
+  name: signer
+  namespace: serving-cert-approver-workaround
+---
+apiVersion: v1
+data:
+  approver.sh: "echo \"Logged-in as: `oc whoami`\"\n\ncsrcount=`oc get csr | grep
+    -i Pending |wc -l`\npendingcsr=`oc get csr | grep -i Pending  | awk '{print $1}'`\n\nif
+    [ $csrcount -gt 0 ]\nthen\n  echo \"Listing all Pending CSRs...\"\n  oc get csr
+    | grep Pending\n  echo \"Approving only Node Serving Certificate CSR, please approve
+    node-bootstrapper manually...\"\n\n  for csr in $pendingcsr; do\n    if [[ `oc
+    get csr  -o  custom-columns=:.spec.username $csr` == *\"node-bootstrapper\"* ]];
+    then\n  \t  echo \"Detected $csr as bootstrap request, skipping, please approve
+    manually ...\"\n    else\n\t  oc adm certificate approve $csr\n    fi\n  done
+    \ \nelse\n  echo \"No Node Serving Certificate CSR in pending approval state...\"\nfi\n"
+kind: ConfigMap
+metadata:
+  name: script
+  namespace: serving-cert-approver-workaround
+---
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: node-serving-cert-approver-cronjob
+  namespace: serving-cert-approver-workaround
+spec:
+  schedule: '1 * * * *'
+  concurrencyPolicy: Forbid
+  suspend: false
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          volumes:
+            - name: script
+              configMap:
+                 name: script
+                 defaultMode: 0750
+          containers:
+            - resources:
+                limits:
+                  memory: '256Mi'
+                  cpu: '100m'
+              terminationMessagePath: /dev/termination-log
+              name: serving-cert-approver
+              volumeMounts:
+                - name: script
+                  mountPath: /approver
+              terminationMessagePolicy: File
+              image: >-
+                image-registry.openshift-image-registry.svc:5000/serving-cert-approver-workaround/oclientubi8:latest
+              imagePullPolicy: IfNotPresent
+              args:
+                - /bin/sh
+                - '-c'
+                - /approver/approver.sh
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+          serviceAccount: signer
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 10
+
+
+
+
+

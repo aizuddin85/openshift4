@@ -3,6 +3,11 @@
 
 **THIS CRON SCRIPT WILL SKIP "NODE-BOOTSTRAPPER" CSR APPROVAL REQUEST**
 
+For impatient:
+```
+#> oc create -f all-in-one.yaml
+```
+
 
 **NOTE:** This is community effort, and provided as-is without any support for such.
 
