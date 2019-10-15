@@ -1,4 +1,4 @@
-openshift_version: 4.1.13
+openshift_version: 4.1.18
 openshift_clusternet: 10.128.0.0/14
 openshift_clusternetprefix: 23
 openshift_servicenet: 172.30.0.0/16

@@ -15,8 +15,8 @@ spec:
           cpu: 500m
           memory: 2Gi
       storage:
-        storageClassName: "rook-ceph-block"
-        size: "100G"
+        storageClassName: "rook-ceph-block-singlereplica"
+        size: "50G"
       redundancyPolicy: "SingleRedundancy"
   visualization:
     type: "kibana"
@@ -44,7 +44,7 @@ spec:
         requests:
           cpu: 200m
           memory: 200Mi
-      schedule: "*/10 * * * *"
+      schedule: "30 1 * * *"
   collection:
     logs:
       type: "fluentd"
