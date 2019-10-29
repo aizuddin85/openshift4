@@ -6,7 +6,7 @@ master03.ocp4.local.bytewise.my
 worker01.ocp4.local.bytewise.my
 worker02.ocp4.local.bytewise.my
 worker03.ocp4.local.bytewise.my
-worker04.ocp4.local.bytewise.my
+#worker04.ocp4.local.bytewise.my
 
 [ocp4_bootstrap_vm]
 bootstrap.ocp4.local.bytewise.my
@@ -21,7 +21,7 @@ master03.ocp4.local.bytewise.my
 worker01.ocp4.local.bytewise.my
 worker02.ocp4.local.bytewise.my
 worker03.ocp4.local.bytewise.my
-worker04.ocp4.local.bytewise.my
+#worker04.ocp4.local.bytewise.my
 
 [helper_vm]
 bastion4.local.bytewise.my
