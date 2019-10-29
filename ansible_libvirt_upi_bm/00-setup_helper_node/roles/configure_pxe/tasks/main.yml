@@ -11,7 +11,7 @@
     - "{{ pxe_image_directory }}"
     - "{{ pxe_boot_direcotry }}"
 
-- name: Downloading RHCOS 4.1.0 initram
+- name: Downloading RHCOS 4.2.0 initram
   get_url:
     url: "{{ rhcos_initramfs_url }}"
     dest: "{{ pxe_image_directory }}"
@@ -21,7 +21,7 @@
       - configure_pxe_server
       - download_rhcos_initram
 
-- name: Downloading RHCOS 4.1.0 kernel
+- name: Downloading RHCOS 4.2.0 kernel
   get_url:
     url: "{{ rhcos_kernel_url }}"
     dest: "{{ pxe_image_directory }}"
