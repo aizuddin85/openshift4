@@ -1,3 +1,5 @@
+NOTE: This section deprecated. Use official docs.
+
 ## Configuring openshift-logging.
 
 1. Create required namespace namespace.yaml
