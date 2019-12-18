@@ -1,4 +1,4 @@
-NOTE: To make this succesful, logging instace should be set as unmanaged and become unsupported. To upgrade logging stack, backup configMap, set as managed and let stack be upgraded. Once upgraded set as unmanaged again and restore your custom configMap.
+NOTE: To make this succesful, logging instace should be set as unmanaged. To upgrade logging stack, backup configMap, set as managed and let stack be upgraded. Once upgraded set as unmanaged again and restore your custom configMap.
 
 1. Edit configMap of fluentd as per fluentd-cm.yaml  
 2. Delete all fluentd pods:
