@@ -8,7 +8,7 @@
   when: ansible_distribution_version|int == 8
 
 - name: Ensure pkgs installed (RHEL 7)
-  dnf:
+  yum:
     name: "{{ rhel7_pkgs }}"
     state: latest
   tags: initial_setup

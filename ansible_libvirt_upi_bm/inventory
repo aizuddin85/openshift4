@@ -24,5 +24,5 @@ worker03.ocp4.local.bytewise.my
 worker04.ocp4.local.bytewise.my
 
 [helper_vm]
-bastion4.local.bytewise.my
+ose.local.bytewise.my
 

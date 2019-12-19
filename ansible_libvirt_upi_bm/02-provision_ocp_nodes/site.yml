@@ -8,13 +8,13 @@
     - configure_pxeconfig
     - configure_lbconfig
     - configure_ignitionfiles
-  vars_prompt:
-    - name: redhat_pull_secret
-      prompt: "Pull secret from cloud.redhat.com"
-      private: no
-    - name: core_ssh_publickey
-      prompt: "Core SSH Public key"
-      private: no
+#  vars_prompt:
+#    - name: core_ssh_publickey
+#      prompt: "Core SSH Public key"
+#      private: no
+#    - name: redhat_pull_secret
+#      prompt: "Pull secret from cloud.redhat.com"
+#      private: no
 - name: Preparing and Deploying VM on Libvirt
   become: true
   vars:

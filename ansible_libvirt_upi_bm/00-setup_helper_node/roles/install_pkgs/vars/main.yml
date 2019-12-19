@@ -10,7 +10,7 @@ rhel8_pkgs:
   - vim
 
 rhel7_pkgs:
-  - dhcpd
+  - dhcp
   - tftp-server
   - syslinux
   - httpd

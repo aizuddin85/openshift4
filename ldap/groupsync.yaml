@@ -1,0 +1,27 @@
+kind: LDAPSyncConfig
+apiVersion: v1
+url: ldap://idm.local.bytewise.my:389
+bindDN: uid=xxxx,cn=users,cn=accounts,dc=local,dc=bytewise,dc=my
+bindPassword: xxxxxx
+groupUIDNameMapping:
+  "cn=admins,cn=groups,cn=accounts,dc=local,dc=bytewise,dc=my": Administrators
+rfc2307:
+    groupsQuery:
+        baseDN: "cn=groups,cn=accounts,dc=local,dc=bytewise,dc=my"
+        scope: sub
+        derefAliases: never
+        pageSize: 0
+        filter: (objectclass=groupofnames)
+    groupUIDAttribute: dn
+    groupNameAttributes: [ cn ] 
+    groupMembershipAttributes: [ member ]
+    usersQuery:
+        baseDN: "cn=accounts,dc=local,dc=bytewise,dc=my"
+        scope: sub
+        derefAliases: never
+        pageSize: 0
+    userUIDAttribute: dn 
+    userNameAttributes: [ uid ]
+    tolerateMemberNotFoundErrors: false
+    tolerateMemberOutOfScopeErrors: true
+

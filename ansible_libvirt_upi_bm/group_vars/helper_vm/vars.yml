@@ -5,6 +5,6 @@ dhcp_netmask: 255.255.255.0
 dhcp_options_router: 192.168.50.1
 dhcp_options_dns: 192.168.50.254
 dhcp_options_ntp_server: 103.16.182.23,103.16.182.214
-dhcp_options_dns_search: '"local.bytewise.my","ocp4.local.bytewise.my"'
+dhcp_options_dns_search: '"ocp4.local.bytewise.my","local.bytewise.my"'
 haproxy_stat_user: 'admin'
 haproxy_stat_pass: 'admin123'

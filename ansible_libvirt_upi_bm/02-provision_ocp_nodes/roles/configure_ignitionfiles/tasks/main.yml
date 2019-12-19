@@ -21,8 +21,16 @@
   tags: 
     - configure_ignitions_file
 
+- name: Prepare ignition files
+  template:
+    src: install-config.yaml.j2
+    dest: ~/ocp4/install-config-base.yaml
+  tags:
+    - configure_ignitions_file
+
+
 - name: Execute openshift installer file
-  shell: openshift-install create ignition-configs --dir=/root/ocp4
+  shell: /usr/bin/openshift-install create ignition-configs --dir=/root/ocp4
   tags: 
     - configure_ignitions_file
 
