@@ -19,8 +19,8 @@ networking:
   - {{ openshift_servicenet }}
 platform:
   none: {}
-pullSecret: '{{ redhat_pull_secret }}'
-sshKey: '{{ core_ssh_publickey }}'
+pullSecret: '{"auths": {"registry.local.bytewise.my": {"auth": "bXphbGk6TmF1cmFoMjAxMg=="}}}'
+sshKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCVnCuYHGGCLfbgmngKzj5xEFlH+cHceVZVTYxzPElPnnt+N74CPz3AMTSD143q5pcxVhaHycBYVZouGJzXU+slYzalNx5rRXN5VjQgvc6TRWbQofnNMiIHJFczc4rLwe9jfCUIsLrVELxPVFhdW3xpo8GvvhGOJAbCEsLrP1UFz8HMtEA7605X96//xBzO4jLvEUUTpU6IyYwyDZtiKERbohS44AaC/0ohAtRpvzSFCg09HJeTuLtLtuLaOfYaxUZ2USXfBzFPvIr/Vfe8YEfFOWvtn/RsFX0MRC9e1swMiyJvNfXPOYn1DooFGJrsATwsnpQPaC41csJWs7rNoFgUbD+54y1V1D2pSI2y1k/3oU+gX6uBPo0RQWpX8T3X/WAjSpE76gfEpN8HpJvqhpv4u8K/fyJoKq9kR99YALr+c+hOjjsLS0iXOt9ba5lHzr0+x3me0RI5rIUFenTy9JPZSAjO/QbRRI4t34lO1qagtpLNy7N2AsVPffgZAwaUmAc= mzali@mzali-fedora.redhat.com'
 additionalTrustBundle: |
   -----BEGIN CERTIFICATE-----
   MIIF5TCCA82gAwIBAgIUN/7cw2wGXWdL6UjQZpwGe5sdrCowDQYJKoZIhvcNAQEL
@@ -56,3 +56,10 @@ additionalTrustBundle: |
   d8z1qAEtfpj0b9vRH3UfleRxuDn5DJxzojavSwrPaygEfkfiKJkaE7P8+pvWtijM
   9quUtHSeA8adIxn4hG+dLTuGItTDuzVG7A==
   -----END CERTIFICATE-----
+imageContentSources:
+- mirrors:
+  - registry.local.bytewise.my/mzali/openshift4
+  source: quay.io/openshift-release-dev/ocp-release
+- mirrors:
+  - registry.local.bytewise.my/mzali/openshift4
+  source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
