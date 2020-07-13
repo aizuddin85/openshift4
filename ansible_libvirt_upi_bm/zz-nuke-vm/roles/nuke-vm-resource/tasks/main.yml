@@ -1,0 +1,19 @@
+---
+# tasks file for roles/nuke-vm-resource
+- name: Ensure VM are stopped
+  delegate_to: localhost
+  virt:
+    command: destroy
+    guest: "{{ inventory_hostname }}"
+  ignore_errors: true
+
+- name: Undefine the VM
+  delegate_to: localhost
+  virt:
+    command: undefine
+    guest: "{{ inventory_hostname }}"
+  ignore_errors: true
+
+
+
+

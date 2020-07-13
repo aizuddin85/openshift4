@@ -1,0 +1,20 @@
+---
+- name: Configuring required DNS on IdM for OCP4 VMs and URLs
+  vars:
+    openshift_domain: ocp4
+    openshift_routedomain: apps
+    dns_a_zone: local.bytewise.my
+    dns_ptr_zone: 50.168.192.in-addr.arpa
+    ipa_host: idm.local.bytewise.my
+    ipa_user: admin
+    ldap_uri: ldap://idm.local.bytewise.my/
+    ldap_bind: uid=admin,cn=users,cn=accounts,dc=local,dc=bytewise,dc=my
+    ldap_dns_srv_dn: idnsname=_etcd-server-ssl._tcp.ocp4,idnsname=local.bytewise.my.,cn=dns,dc=local,dc=bytewise,dc=my
+  vars_prompt:
+    - name: ipa_password
+      prompt: "Please enter admin password for IdM"
+      private: yes
+  hosts: all
+  gather_facts: false
+  roles:
+    - configure_vm_dns

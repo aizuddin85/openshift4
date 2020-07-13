@@ -1,0 +1,8 @@
+---
+# tasks file for roles/nuke-vm-storage
+- name: Clean up VM storage
+  delegate_to: localhost
+  file:
+    path: '/var/lib/libvirt/images/{{ inventory_hostname }}.qcow2'
+    state: absent
+

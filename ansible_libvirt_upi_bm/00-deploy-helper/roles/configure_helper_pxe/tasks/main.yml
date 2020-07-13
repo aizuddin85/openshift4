@@ -1,0 +1,50 @@
+---
+# tasks file for roles/configure_helper_pxe
+- name: Create PXE boot default directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  tags:
+    - configure_helper_pxe
+  with_items:
+    - "{{ pxe_image_directory }}"
+    - "{{ pxe_boot_direcotry }}"
+
+- name: Downloading {{ rhcos_initramfs_url }} initramfs
+  get_url:
+    url: "{{ rhcos_initramfs_url }}"
+    dest: "{{ pxe_image_directory }}"
+    timeout: 300
+    validate_certs: false
+  tags:
+    - configure_helper_pxe
+
+- name: Downloading {{ rhcos_kernel_url }} kernel
+  get_url:
+    url: "{{ rhcos_kernel_url }}"
+    dest: "{{ pxe_image_directory }}"
+    validate_certs: false
+    timeout: 300
+  tags:
+    - configure_helper_pxe
+
+- name: Copy file for PXE boot
+  shell: cp -rvf /usr/share/syslinux/* /var/lib/tftpboot
+  tags:
+    - configure_helper_pxe
+
+- name: Restore SELinux fcontext
+  shell: restorecon -RFv "{{ item }}"
+  tags:
+    - configure_helper_pxe
+  with_items:
+    - "{{ pxe_image_directory }}"
+    - "{{ pxe_boot_direcotry }}"
+
+- name: start tftp
+  service:
+    name: tftp
+    state: restarted
+    enabled: yes
+  tags:
+    - configure_helper_pxe

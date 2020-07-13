@@ -1,0 +1,19 @@
+---
+# tasks file for roles/configure_vm_haproxy
+- name: Updating /etc/haproxy/haproxy.conf
+  template:
+    src: haproxy.conf.j2
+    dest: /etc/haproxy/haproxy.cfg
+  tags:
+    - configure_vm_haproxy
+  when: inventory_hostname in groups['helper_vm']
+
+
+- name: Restart haproxy services
+  service:
+    name: haproxy
+    state: restarted
+    enabled: yes
+  tags:
+    - configure_vm_haproxy
+  when: inventory_hostname in groups['helper_vm']

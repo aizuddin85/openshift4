@@ -1,8 +1,0 @@
-default menu.c32
-prompt 0
-timeout 50
-menu title **** OpenShift 4 Bootstrap PXE Boot Menu ****
- 
-label Install CoreOS 4.1.0 Bootstrap Node
- kernel /openshift4/4.1.0/rhcos-4.1.0-x86_64-installer-kernel
- append ip=dhcp rd.neednet=1 coreos.inst.install_dev=vda console=tty0 console=ttyS0 coreos.inst=yes coreos.inst.image_url=http://{{ vm_ipaddress }}:8080/openshift4/images/rhcos-4.1.0-x86_64-metal-bios.raw.gz coreos.inst.ignition_url=http://{{ vm_ipaddress }}:8080/openshift4/{{ openshift_version }}/ignitions/bootstrap.ign initrd=/openshift4/4.1.0/rhcos-4.1.0-x86_64-installer-initramfs.img

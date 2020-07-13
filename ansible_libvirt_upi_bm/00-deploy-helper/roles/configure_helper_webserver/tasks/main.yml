@@ -1,0 +1,47 @@
+---
+# tasks file for 00-deploy-helper/roles/configure_helper_webserver
+- name: Create web hosting directory for images and ignitions file
+  file:
+    path: "{{ item }}"
+    state: directory
+  tags:
+      - configure_helper_webserver
+  with_items:
+    - "{{ images_directory }}"
+    - "{{ ignitions_directory }}"
+
+- name: Downloading {{ rhcos_biosimg_url }} OS BIOS image
+  get_url:
+    url: "{{ rhcos_biosimg_url }}"
+    dest: "{{ images_directory }}"
+    timeout: 300
+    validate_certs: false
+  when: biossetup
+  tags:
+      - configure_helper_webserver
+      - download_rhcos_image
+
+- name: Restoring SELinux fscontext
+  shell: restorecon -RFv "{{ item }}"
+  tags:
+      - configure_helper_webserver
+  with_items:
+    - "{{ images_directory }}"
+    - "{{ ignitions_directory }}"
+
+- name: Configure http to listen to 8080
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Listen 80'
+    line: 'Listen 8080'
+  changed_when: True
+  tags:
+      - configure_helper_webserver
+
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
+  tags:
+      - configure_helper_webserver

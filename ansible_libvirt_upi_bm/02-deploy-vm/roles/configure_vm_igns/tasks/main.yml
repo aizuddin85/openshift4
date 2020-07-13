@@ -1,0 +1,55 @@
+---
+# tasks file for roles/configure_vm_igns
+
+- name: Clean up previous working directory
+  file:
+    path: ~/ocp4/
+    state: absent
+  tags: 
+    - configure_vm_igns
+  
+- name: Ensure working directory exists
+  file:
+    path: ~/ocp4
+    state: directory
+  tags: 
+    - configure_vm_igns
+
+- name: Prepare ignition files
+  template:
+    src: install-config.yaml.j2
+    dest: ~/ocp4/install-config.yaml
+  tags: 
+    - configure_vm_igns
+
+- name: Prepare ignition files
+  template:
+    src: install-config.yaml.j2
+    dest: ~/ocp4/install-config-base.yaml
+  tags: 
+    - configure_vm_igns
+
+- name: Execute openshift installer file
+  shell: /usr/bin/openshift-install create ignition-configs --dir=/root/ocp4
+  tags: 
+    - configure_vm_igns
+
+- name: Ensure web hosting directory exists
+  file:
+    path: /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+    state: directory
+    owner: apache
+    group: root
+    recurse: yes
+  tags: 
+    - configure_vm_igns
+ 
+- name: Copy ign file to http hosted folder
+  shell: cp -rvf ~/ocp4/*.ign /var/www/html/openshift4/{{ openshift_version }}/ignitions/; chown -Rvf apache. /var/www/html/openshift4/{{ openshift_version }}/ignitions/*.ign
+  tags: 
+    - configure_vm_igns
+
+- name: Restore SELinux fcontext /var/www/html
+  command: restorecon -RFv /var/www/html
+  tags: 
+    - configure_vm_igns

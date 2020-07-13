@@ -1,0 +1,13 @@
+---
+- name: Preparing and deploying virtual machines
+  become: true
+  gather_facts: false
+  hosts: all
+  vars:
+    vm_network: 'LocalNet50'
+  roles:
+    - configure_vm_dhcp
+    - configure_vm_pxeconfig
+    - configure_vm_haproxy
+    - configure_vm_storage
+    - configure_vm_resource

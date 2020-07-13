@@ -1,0 +1,5 @@
+vm_disksize: 50G
+vm_macaddress: "52:54:00:7d:2d:1e"
+vm_ipaddress: "192.168.50.105"
+vm_vcpu: 4
+vm_memory_gb: 8

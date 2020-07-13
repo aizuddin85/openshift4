@@ -1,0 +1,9 @@
+---
+- name: Clean up nodes
+  hosts: ocp4_nodes
+  connection: local
+  gather_facts: false
+  roles:
+    - nuke-vm-resource
+    - nuke-vm-storage
+

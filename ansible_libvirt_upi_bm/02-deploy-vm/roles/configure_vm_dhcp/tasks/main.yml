@@ -1,0 +1,18 @@
+---
+# tasks file for roles/configure_vm_dhcp
+- name: Updating /etc/dhcp/dhcpd.conf on helper node
+  template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+  tags:
+    - configure_vm_dhcp
+  when: inventory_hostname in groups['helper_vm']
+
+- name: Restart DHCP services on helper node
+  service:
+    name: dhcpd
+    state: restarted
+    enabled: yes
+  when: inventory_hostname in groups['helper_vm'] 
+  tags:
+    - configure_vm_dhcp

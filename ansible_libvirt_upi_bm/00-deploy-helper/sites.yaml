@@ -1,0 +1,10 @@
+---
+- name: Preparing & Configuring Helper Node
+  become: true
+  hosts: helper_vm
+  gather_facts: true
+  roles:
+    - configure_helper_pkgs
+    - configure_helper_webserver
+    - configure_helper_pxe
+    - configure_helper_binary

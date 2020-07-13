@@ -1,0 +1,48 @@
+---
+# tasks file for roles/configure_helper_pkgs
+- name: Ensure pkgs installed (RHEL 8)
+  dnf:
+    name: "{{ rhel8_pkgs }}"
+    state: latest
+  tags:
+    - configure_helper_pkgs_el8
+  when: ansible_distribution_version|int == 8
+
+- name: Ensure pkgs installed (RHEL 7)
+  yum:
+    name: "{{ rhel7_pkgs }}"
+    state: latest
+  tags:
+    - configure_helper_pkgs_el7
+  when: ansible_distribution_version|int == 7
+
+- name: Allowing firewall rules for services
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  with_items: "{{ allowed_services }}"
+  tags:
+    - configure_helper_pkgs_el8
+
+- name: Allowing firewall rules for ports
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  with_items: "{{ allowed_ports }}"
+  tags:
+    - configure_helper_pkgs_el8
+
+- name: Allowing haproxy to bind to alternate port
+  seport:
+    ports: "{{ item }}"
+    setype: http_port_t
+    state: present
+    proto: tcp
+  with_items: "{{ allowed_http_port_t }}"
+  tags:
+    - configure_helper_pkgs_el8
+

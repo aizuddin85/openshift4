@@ -1,8 +1,5 @@
-vm_disktype: "fast"
-vm_disksize: 30G
-vm_macaddress: "52:54:00:7d:2d:12"
-vm_ipaddress: "192.168.50.142"
-vm_network: "LocalNet50"
+vm_disksize: 50G
+vm_macaddress: "52:54:00:7d:2d:1b"
+vm_ipaddress: "192.168.50.102"
 vm_vcpu: 6
-vm_cpumode: "Skylake-Client"
-vm_memory_gb: 8
+vm_memory_gb: 12

@@ -1,0 +1,25 @@
+---
+# tasks file for roles/configure_vm_storage
+- name: Refresh libvirt default storage pool
+  connection: local
+  run_once: true
+  shell: virsh pool-refresh default
+  tags:
+    - configure_vm_storage
+
+- name: Creating VM storage
+  connection: local
+  shell:
+    cmd: "qemu-img create -f qcow2 /var/lib/libvirt/images/{{ inventory_hostname }}.qcow2 {{ vm_disksize }}"
+  when: '"ocp4_nodes" in group_names'
+  tags:
+    - configure_vm_storage
+
+- name: Ensure VM storage has correct permission
+  connection: local
+  file:
+    path: '/var/lib/libvirt/images/{{ inventory_hostname }}.qcow2'
+    mode: u+rw,g-rwx,o-rwx
+  when: '"ocp4_nodes" in group_names'
+  tags:
+    - configure_vm_storage

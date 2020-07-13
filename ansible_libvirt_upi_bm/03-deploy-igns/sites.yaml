@@ -1,0 +1,7 @@
+---
+- name: Preparing and deploying ignitions
+  become: true
+  gather_facts: false
+  hosts: helper_vm
+  roles:
+    - configure_vm_igns
