@@ -31,7 +31,7 @@ NOTE: Please change the "OC_VERSION" environment to suite your version.
 ```
 
 
-## 3. Build Image
+## 3. Build Image (recommended to use prebuilt image https://catalog.redhat.com/software/containers/openshift4/ose-cli/5cd9ba3f5a13467289f4d51d?container-tabs=gti)
 
 ```
 #> oc start-build docker-build --follow -n serving-cert-approver-workaround
