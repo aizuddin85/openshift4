@@ -1,7 +1,15 @@
 # OCP 4 UPI Baremetal
 ## Node Serving Certificate CSR Approver CronJob
 
-# WARNING: THIS REPO IS NO LONGER MAINTAINED IN FAVOR OF AUTOMATIC CERT APPROVER ALREADY GA AND TAKE OVER SERVING CSR CHECK AND APPROVAL!
+How kubelet client and serving certificate being rotated?
+https://bugzilla.redhat.com/show_bug.cgi?id=1737611#c19
+
+
+Rotation  
+-Kubelet is configured for rotating both client and serving certificates.  
+-Kube controller manager approver approves kubelet renewal client CSRs via system-bootstrap-node-renewal ClusterRoleBinding  
+-Kube controller manager approver does not support approval of kubelet renewal serving CSRs.  
+-So it’s up to the machine approver to approve renewal serving CSRs. If they don meet criteria manual approval is needed. 
 
 
 **THIS CRON SCRIPT WILL SKIP "NODE-BOOTSTRAPPER" CSR APPROVAL REQUEST**
@@ -31,7 +39,7 @@ NOTE: Please change the "OC_VERSION" environment to suite your version.
 ```
 
 
-## 3. Build Image (recommended to use prebuilt image https://catalog.redhat.com/software/containers/openshift4/ose-cli/5cd9ba3f5a13467289f4d51d?container-tabs=gti)
+## 3. Build Image (**recommended** to use prebuilt image https://catalog.redhat.com/software/containers/openshift4/ose-cli/5cd9ba3f5a13467289f4d51d?container-tabs=gti and update image reference accordingly in YAML file)
 
 **NOTE:** You may skip this step if using recommended and official openshift4/ose-cli image.
 
