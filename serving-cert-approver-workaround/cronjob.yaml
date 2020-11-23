@@ -24,7 +24,7 @@ spec:
             - resources:
                 limits:
                   memory: '256Mi'
-                  cpu: '100m'
+                  cpu: '500m'
               terminationMessagePath: /dev/termination-log
               name: serving-cert-approver
               volumeMounts:
