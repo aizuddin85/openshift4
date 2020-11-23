@@ -1,5 +1,7 @@
 # OCP 4 UPI Kubelet Serving CSR Approver CronJob
 
+There is requirement for UPI installation to manually approve kubelet serving CSR on monthly basis. This cronjob will automate those rotation approval when CSR is left unapproved by machine approver.
+
 How kubelet client and serving certificate being rotated?
 https://bugzilla.redhat.com/show_bug.cgi?id=1737611#c19
 ```
