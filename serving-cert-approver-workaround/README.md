@@ -1,5 +1,4 @@
-# OCP 4 UPI Baremetal
-## Node Serving Certificate CSR Approver CronJob
+# OCP 4 UPI Kubelet Serving CSR Approver CronJob
 
 How kubelet client and serving certificate being rotated?
 https://bugzilla.redhat.com/show_bug.cgi?id=1737611#c19
