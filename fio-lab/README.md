@@ -34,3 +34,7 @@ This deployment is to help to run FIO benchmarking for OCS PV.
 
 * Write IOPS Latency result example
 ![Write IOPS](https://github.com/aizuddin85/openshift4/blob/master/fio-lab/assets/writeiops.png)
+
+
+Reference:
+* https://github.com/arthur0/fio-tools
