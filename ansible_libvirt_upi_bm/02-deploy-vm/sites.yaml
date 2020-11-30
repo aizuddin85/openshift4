@@ -4,7 +4,7 @@
   gather_facts: false
   hosts: all
   vars:
-    vm_network: 'LocalNet50'
+    vm_network: 'LocalNAT50'
   roles:
     - configure_vm_dhcp
     - configure_vm_pxeconfig

@@ -10,23 +10,6 @@
     - "{{ pxe_image_directory }}"
     - "{{ pxe_boot_direcotry }}"
 
-- name: Downloading {{ rhcos_initramfs_url }} initramfs
-  get_url:
-    url: "{{ rhcos_initramfs_url }}"
-    dest: "{{ pxe_image_directory }}"
-    timeout: 300
-    validate_certs: false
-  tags:
-    - configure_helper_pxe
-
-- name: Downloading {{ rhcos_kernel_url }} kernel
-  get_url:
-    url: "{{ rhcos_kernel_url }}"
-    dest: "{{ pxe_image_directory }}"
-    validate_certs: false
-    timeout: 300
-  tags:
-    - configure_helper_pxe
 
 - name: Copy file for PXE boot
   shell: cp -rvf /usr/share/syslinux/* /var/lib/tftpboot

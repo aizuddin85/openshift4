@@ -1,6 +1,5 @@
-openshift_major_version: 4.4
-openshift_iso_version: 4.4.3
-openshift_version: 4.4.12
+openshift_major_version: 4.6
+openshift_version: 4.6.1
 openshift_clusternet: 10.8.0.0/14
 openshift_clusternetprefix: 23
 openshift_servicenet: 172.30.0.0/16

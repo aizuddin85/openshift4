@@ -6,12 +6,13 @@ dhcp_options_ntp_server: 103.16.182.23,103.16.182.214
 dhcp_options_dns_search: '"ocp4.local.bytewise.my","local.bytewise.my"'
 haproxy_stat_user: 'admin'
 haproxy_stat_pass: 'admin123'
-images_directory: /var/www/html/openshift4/images
-ignitions_directory: /var/www/html/openshift4/{{ openshift_version }}
-rhcos_biosimg_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.4/latest/rhcos-4.4.3-x86_64-metal.x86_64.raw.gz
+images_directory: /var/www/html/openshift4/{{ openshift_version }}/images
+ignitions_directory: /var/www/html/openshift4/{{ openshift_version }}/ignitions
 pxe_image_directory: /var/lib/tftpboot/openshift4/{{ openshift_version }}
 pxe_boot_direcotry: /var/lib/tftpboot/pxelinux.cfg
-rhcos_kernel_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.4/latest/rhcos-4.4.3-x86_64-installer-kernel-x86_64
-rhcos_initramfs_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.4/latest/rhcos-4.4.3-x86_64-installer-initramfs.x86_64.img
-oc_install_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/4.4.12/openshift-install-linux-4.4.12.tar.gz
-oc_client_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/4.4.12/openshift-client-linux-4.4.12.tar.gz
+rhcos_image_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/{{ openshift_major_version }}/{{ openshift_version }}/rhcos-{{ openshift_version }}-x86_64-metal.x86_64.raw.gz
+rhcos_kernel_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/{{ openshift_major_version }}/{{ openshift_version }}/rhcos-{{ openshift_version }}-x86_64-live-kernel-x86_64
+rhcos_initram_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/{{ openshift_major_version }}/{{ openshift_version }}/rhcos-{{ openshift_version }}-x86_64-live-initramfs.x86_64.img
+rhcos_rootfs_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/{{ openshift_major_version }}/{{ openshift_version }}/rhcos-{{ openshift_version }}-x86_64-live-rootfs.x86_64.img
+oc_install_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/{{ openshift_version }}/openshift-install-linux-{{ openshift_version }}.tar.gz
+oc_client_url: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/{{ openshift_version }}/openshift-client-linux-{{ openshift_version }}.tar.gz

@@ -14,7 +14,7 @@ spec:
         volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: cephrbd
+            claimName: cephfs
         - name: benchmarks
           emptyDir: {}
         - name: plots
@@ -22,7 +22,7 @@ spec:
         containers:
         - name: fio-frontend
           imagePullPolicy: IfNotPresent
-          image: artmr/fio-http-server:0.1
+          image: quay.io/mzali/fio-http-server:0.1
           volumeMounts:
           - name: benchmarks
             mountPath: /server/benchmarks
@@ -32,8 +32,8 @@ spec:
           - containerPort: 8000
         initContainers:
         - name: fio-gen-data
-          imagePullPolicy: Always
-          image: artmr/fio-gen-data:0.1
+          imagePullPolicy: IfNotPresent
+          image: quay.io/mzali/fio-gen-data:0.1
           args: ["/app/job-templates/random-template.fio"]
           volumeMounts:
           - name: data 
@@ -97,8 +97,8 @@ spec:
                   name: fio-tools
                   key: gen-data.time-based
         - name: fio-gen-plots
-          imagePullPolicy: Always
-          image: artmr/fio-gen-plots:0.1
+          imagePullPolicy: IfNotPresent
+          image: quay.io/mzali/fio-gen-plots:0.1
           args: ["-L", "-i", "/benchmarks"]
           volumeMounts:
           - name: benchmarks

@@ -8,7 +8,6 @@
     - configure_vm_haproxy
   when: inventory_hostname in groups['helper_vm']
 
-
 - name: Restart haproxy services
   service:
     name: haproxy

@@ -1,6 +1,8 @@
 ---
 # tasks file for roles/configure_helper_binary
 - name: Downloading {{ oc_install_url }}
+  async: 3600
+  poll: 0
   get_url:
     url: "{{ oc_install_url }}"
     dest: /usr/bin/
@@ -8,8 +10,11 @@
     timeout: 300
   tags: 
     - configure_helper_binary
+  register: oc_install_async
 
 - name: Downloading {{ oc_client_url }}
+  async: 3600
+  poll: 0
   get_url:
     url: "{{ oc_client_url }}"
     dest: /usr/bin/
@@ -17,13 +22,42 @@
     timeout: 300
   tags: 
     - configure_helper_binary
+  register: oc_client_async
+
+- name: Check on an oc install download async task
+  async_status:
+    jid: "{{ oc_install_async.ansible_job_id }}"
+  register: job_result_oc_install_async
+  until: job_result_oc_install_async.finished
+  retries: 100
+  delay: 10
+  tags:
+    - configure_helper_binary
+
+- name: Check on an oc client download async task
+  async_status:
+    jid: "{{ oc_client_async.ansible_job_id }}"
+  register: job_result_oc_client_async
+  until: job_result_oc_client_async.finished
+  retries: 100
+  delay: 10
+  tags:
+    - configure_helper_binary
 
 - name: Extracting downloaded installer binary
-  shell: tar -C /usr/bin -xvf /usr/bin/openshift-install-linux-{{ openshift_version }}.tar.gz
+  unarchive:
+    src: /usr/bin/openshift-install-linux-{{ openshift_version }}.tar.gz
+    dest: /usr/bin
+    remote_src: yes
   tags: 
     - configure_helper_binary
+    - uncompress
 
 - name: Extracting downloaded client binary
-  shell: tar -C /usr/bin -xvf /usr/bin/openshift-client-linux-{{ openshift_version }}.tar.gz
-  tags: 
+  unarchive:
+    src: /usr/bin/openshift-client-linux-{{ openshift_version }}.tar.gz
+    dest: /usr/bin
+    remote_src: yes
+  tags:
     - configure_helper_binary
+    - uncompress

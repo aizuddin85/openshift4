@@ -10,16 +10,97 @@
     - "{{ images_directory }}"
     - "{{ ignitions_directory }}"
 
-- name: Downloading {{ rhcos_biosimg_url }} OS BIOS image
+- name: Downloading {{ rhcos_image_url }}
+  async: 1200
+  poll: 0
   get_url:
-    url: "{{ rhcos_biosimg_url }}"
+    url: "{{ rhcos_image_url }}"
     dest: "{{ images_directory }}"
     timeout: 300
     validate_certs: false
-  when: biossetup
   tags:
       - configure_helper_webserver
       - download_rhcos_image
+  register: download_rhcos_image
+
+- name: Downloading {{ rhcos_kernel_url }}
+  async: 1200
+  poll: 0
+  get_url:
+    url: "{{ rhcos_kernel_url }}"
+    dest: "{{ images_directory }}"
+    timeout: 300
+    validate_certs: false
+  tags:
+      - configure_helper_webserver
+      - download_rhcos_kernel
+  register: download_rhcos_kernel
+
+- name: Downloading {{ rhcos_initram_url }}
+  async: 1200
+  poll: 0
+  get_url:
+    url: "{{ rhcos_initram_url }}"
+    dest: "{{ images_directory }}"
+    timeout: 300
+    validate_certs: false
+  tags:
+      - configure_helper_webserver
+      - download_rhcos_initram
+  register: download_rhcos_initram
+
+- name: Downloading {{ rhcos_rootfs_url }}
+  async: 1200
+  poll: 0
+  get_url:
+    url: "{{ rhcos_rootfs_url }}"
+    dest: "{{ images_directory }}"
+    timeout: 300
+    validate_certs: false
+  tags:
+      - configure_helper_webserver
+      - download_rhcos_rootfs
+  register: download_rhcos_rootfs
+
+- name: Check on RHCOS image async download  task
+  async_status:
+    jid: "{{ download_rhcos_image.ansible_job_id }}"
+  register: job_result_download_rhcos_image
+  until: job_result_download_rhcos_image.finished
+  retries: 200
+  delay: 10
+  tags:
+      - configure_helper_webserver
+
+- name: Check on RHCOS kernel async download  task
+  async_status:
+    jid: "{{ download_rhcos_kernel.ansible_job_id }}"
+  register: job_result_download_rhcos_kernel
+  until: job_result_download_rhcos_kernel.finished
+  retries: 200
+  delay: 10
+  tags:
+      - configure_helper_webserver
+
+- name: Check on RHCOS initram async download  task
+  async_status:
+    jid: "{{ download_rhcos_initram.ansible_job_id }}"
+  register: job_result_download_rhcos_initram
+  until: job_result_download_rhcos_initram.finished
+  retries: 200
+  delay: 10
+  tags:
+      - configure_helper_webserver
+
+- name: Check on RHCOS rootfs async download  task
+  async_status:
+    jid: "{{ download_rhcos_rootfs.ansible_job_id }}"
+  register: job_result_download_rhcos_rootfs
+  until: job_result_download_rhcos_rootfs.finished
+  retries: 200
+  delay: 10
+  tags:
+      - configure_helper_webserver
 
 - name: Restoring SELinux fscontext
   shell: restorecon -RFv "{{ item }}"
@@ -28,6 +109,11 @@
   with_items:
     - "{{ images_directory }}"
     - "{{ ignitions_directory }}"
+
+- name: Ensure apache ownership
+  shell: chown -R apache. /var/www/html
+  tags:
+    - configure_helper_webserver
 
 - name: Configure http to listen to 8080
   lineinfile:
@@ -38,7 +124,7 @@
   tags:
       - configure_helper_webserver
 
-- name: restart httpd
+- name: Start and Enable httpd
   service:
     name: httpd
     state: restarted
