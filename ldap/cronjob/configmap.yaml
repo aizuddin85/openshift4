@@ -1,0 +1,38 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ldap-group-syncer
+  namespace: bytewise-platform-mgmt
+  labels:
+    app: cronjob-ldap-group-sync
+data:
+  ldap-group-sync.yaml: |
+    kind: LDAPSyncConfig
+    apiVersion: v1
+    url: ldap://192.168.254.201:389
+    bindDN: "cn=Directory Manager"
+    bindPassword:
+      file: "/etc/bindpass/bindPassword.encrypted"
+      keyFile: "/etc/bindkey/bindPassword.key"
+    insecure: true
+    groupUIDNameMapping:
+      "cn=ocp_admin,ou=groups,dc=bytewise,dc=my": Administrators
+    rfc2307:
+      groupsQuery:
+          baseDN: "ou=groups,dc=bytewise,dc=my"
+          scope: sub
+          derefAliases: never
+          pageSize: 0
+          filter: (objectclass=groupofnames)
+      groupUIDAttribute: dn
+      groupNameAttributes: [ cn ] 
+      groupMembershipAttributes: [ member ]
+      usersQuery:
+          baseDN: "ou=people,dc=bytewise,dc=my"
+          scope: sub
+          derefAliases: never
+          pageSize: 0
+      userUIDAttribute: dn 
+      userNameAttributes: [ uid ]
+      tolerateMemberNotFoundErrors: false
+      tolerateMemberOutOfScopeErrors: true
