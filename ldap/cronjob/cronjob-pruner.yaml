@@ -1,0 +1,55 @@
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: ldap-group-pruner
+  namespace: bytewise-platform-mgmt
+  labels:
+    app: cronjob-ldap-group-sync
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    metadata:
+      labels:
+        app: cronjob-ldap-group-sync
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app: cronjob-ldap-group-sync
+        spec:
+          containers:
+            - name: ldap-group-sync
+              image: "registry.redhat.io/openshift4/ose-cli:v4.7"
+              command: ["/bin/bash", "-c"]
+              args: ["oc adm groups prune --sync-config=/etc/config/ldap-group-sync.yaml --confirm"]
+              volumeMounts:
+                - mountPath: "/etc/config"
+                  name: "ldap-sync-volume"
+                - mountPath: "/etc/bindpass"
+                  name: "ldap-bind-password-encrypted"
+                - mountPath: "/etc/bindkey"
+                  name: "ldap-bind-password-key"
+          volumes:
+            - name: "ldap-sync-volume"
+              configMap:
+                name: "ldap-group-syncer"
+            - name: "ldap-bind-password-encrypted"
+              secret:
+                secretName: "bindencrypted"
+            - name: "ldap-bind-password-key"
+              secret:
+                secretName: "bindkey"
+          nodeSelector:
+            node-role.kubernetes.io/master: ""
+          tolerations:
+          - operator: "Exists" 
+          restartPolicy: "Never"
+          terminationGracePeriodSeconds: 30
+          activeDeadlineSeconds: 500
+          dnsPolicy: "ClusterFirst"
+          serviceAccountName: "ldap-group-syncer"
+          serviceAccount: "ldap-group-syncer"
