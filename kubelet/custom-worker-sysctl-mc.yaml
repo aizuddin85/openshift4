@@ -1,0 +1,17 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: worker
+  name: 10-worker-custom-sysctl
+spec:
+  config:
+    ignition:
+      version: 3.2.0
+    storage:
+      files:
+      - contents:
+          source: data:text/plain;charset=utf-8;base64,IyBDb21wbGlhbmNlIGhhcmRlbmluZyBwcm9maWxlLCBodHRwczovL2dpdGh1Yi5jb20va3ViZXJuZXRlcy9rdWJlcm5ldGVzL2lzc3Vlcy82NjI0MQp2bS5vdmVyY29tbWl0X21lbW9yeT0xCmtlcm5lbC5wYW5pYz0xMAprZXJuZWwucGFuaWNfb25fb29wcz0xCg==
+        mode: 420
+        path: /etc/sysctl.d/10-worker-custom-sysctl.conf
+        overwrite: true
