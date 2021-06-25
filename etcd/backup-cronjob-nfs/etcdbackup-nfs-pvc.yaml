@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: etcdbackup-nfs-pvc
+  namespace: bytewise-platform-mgmt
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  mountOptions:
+    - nfsvers=4.1
