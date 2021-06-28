@@ -1,0 +1,214 @@
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: prod-smcp
+  namespace: istio-system
+spec:
+  addons:
+    grafana:
+      enabled: true
+      install:
+        persistence:
+          enabled: true
+          storageClassName: ocs-storagecluster-cephfs
+          capacity:
+            limits: 
+              cpu: 1000m
+              memory: 1 
+          accessMode: ReadWriteMany
+        service:
+          ingress:
+            contextPath: /grafana
+            tls:
+              termination: reencrypt
+    jaeger:
+      install:
+        ingress: {}
+        storage:
+          elasticsearch:
+            indexCleaner:
+              enabled: true
+              numberOfDays: 7
+            nodeCount: 3
+            redundancyPolicy: SingleRedundancy
+            storage:
+              size: 200G
+              storageClassName: ocs-storagecluster-ceph-rbd
+          type: Elasticsearch
+      name: jaeger
+    kiali:
+      enabled: true
+      install:
+        dashboard:
+          enableGrafana: true
+          enablePrometheus: true
+          enableTracing: true
+          viewOnly: false
+      name: kiali
+  gateways:
+    additionalIngress:
+      ingressgateway-additonal-01:
+        enabled: true
+        runtime:
+          pod:
+            affinity:
+              podAntiAffinity:
+                requiredDuringScheduling:
+                - key: gateway
+                  operator: In
+                  values:
+                  - ingressgateway-additonal-01
+                  topologyKey: kubernetes.io/hostname
+            metadata:
+              labels:
+                gateway: ingressgateway-additonal-01
+          container:
+            resources:
+              limits:
+                cpu: "2"
+                memory: 2Gi
+              requests:
+                cpu: 500m
+                memory: 512Mi
+          deployment:
+            autoScaling:
+              enabled: true
+              maxReplicas: 4
+              minReplicas: 2
+              targetCPUUtilizationPercentage: 85
+            strategy:
+              rollingUpdate:
+                maxUnavailable: 1
+              type: rollingUpdate
+        service:
+          type: ClusterIP
+    egress:
+      enabled: true
+      runtime:
+        container:
+          resources:
+            limits:
+              cpu: 512m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+        deployment:
+          strategy:
+            rollingUpdate:
+              maxUnavailable: 1
+            type: rollingUpdate
+          autoScaling:
+            enabled: true
+            maxReplicas: 2
+            minReplicas: 2
+            targetCPUUtilizationPercentage: 85
+      service: {}
+    ingress:
+      enabled: true
+      runtime:
+        container:
+          resources:
+            limits:
+              cpu: 512m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+        deployment:
+          strategy:
+            rollingUpdate:
+              maxUnavailable: 1
+            type: rollingUpdate
+          autoScaling:
+            enabled: true
+            maxReplicas: 2
+            minReplicas: 2
+            targetCPUUtilizationPercentage: 85
+      service: {}
+  policy:
+    mixer: # To enable Rate Limiting in 2.0.x. EnvoyFilter is the future. https://issues.redhat.com/browse/MAISTRA-2395
+      enableChecks: true
+      failOpen: false
+    type: Mixer
+  profiles:
+  - default
+  proxy:
+    runtime:
+      container:
+          resources:
+            requests:
+              cpu: 128Mi
+              memory: 128Gi
+            limits:
+              cpu: 500m
+              memory: 512Mi   
+  runtime:
+    components:
+      grafana:
+        container:
+          resources:
+            limits:
+              cpu: 1
+              memory: 1Gi
+            requests:
+              cpu: 512m
+              memory: 512Mi
+        deployment: {}
+        pod: {}
+      kiali:
+        container:
+          resources:
+            limits:
+              cpu: 1
+              memory: 1Gi
+            requests:
+              cpu: 512m
+              memory: 512Mi
+        deployment: {}
+        pod: {}
+      pilot:
+        container:
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+        deployment:
+          autoScaling:
+            enabled: true
+            maxReplicas: 4
+            minReplicas: 2
+            targetCPUUtilizationPercentage: 85
+          strategy:
+            rollingUpdate:
+              maxUnavailable: 25%
+            type: rollingUpdate
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringScheduling:
+              - key: app
+                operator: In
+                topologyKey: kubernetes.io/hostname
+                values:
+                - Istiod
+      prometheus:
+        container:
+          resources:
+            limits:
+              cpu: 1
+              memory: 1Gi
+            requests:
+              cpu: 512m
+              memory: 512Mi
+        deployment:
+          replicas: 2
+        pod: {}
+  telemetry:
+    type: Istiod
+  tracing:
+    type: Jaeger
+  version: v2.0
