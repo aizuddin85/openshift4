@@ -50,17 +50,17 @@ kernel = rhcos-4.7.13-x86_64-live-kernel-x86_64
 [root@bastion ~]# virt-install --connect=qemu+ssh://root@hypervisor/system --name="master01.c01" --vcpus=6 --ram=10240 \
 --disk path=/var/lib/libvirt/images/master01.qcow2,bus=virtio,size=80 \
 --os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
---boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.61::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
+--boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/master.ign ip=192.168.254.61::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 
 [root@bastion ~]# virt-install --connect=qemu+ssh://root@hypervisor/system --name="master02.c01" --vcpus=6 --ram=10240 \
 --disk path=/var/lib/libvirt/images/master02.qcow2,bus=virtio,size=80 \
 --os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
---boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.62::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
+--boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/master.ign ip=192.168.254.62::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 
 [root@bastion ~]# virt-install --connect=qemu+ssh://root@hypervisor/system --name="master03.c01" --vcpus=6 --ram=10240 \
 --disk path=/var/lib/libvirt/images/master03.qcow2,bus=virtio,size=80 \
 --os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
---boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.63::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
+--boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/master.ign ip=192.168.254.63::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 ```
 
 * Worker
@@ -68,17 +68,17 @@ kernel = rhcos-4.7.13-x86_64-live-kernel-x86_64
 [root@bastion ~]# virt-install --connect=qemu:///system --name="worker01.c01" --vcpus=8 --ram=24576 \
 --disk path=/var/lib/libvirt/images/worker01.qcow2,bus=virtio,size=80 \
 --os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
---boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.64::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
+--boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/worker.ign ip=192.168.254.64::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 
 [root@bastion ~]# virt-install --connect=qemu:///system --name="worker02.c01" --vcpus=8 --ram=24576 \
 --disk path=/var/lib/libvirt/images/worker02.qcow2,bus=virtio,size=80 \
 --os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
---boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.65::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
+--boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/worker.ign ip=192.168.254.65::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 
 [root@bastion ~]# virt-install --connect=qemu:///system --name="worker03.c01" --vcpus=8 --ram=24576 \
 --disk path=/var/lib/libvirt/images/worker03.qcow2,bus=virtio,size=80 \
 --os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
---boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.66::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
+--boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/worker.ign ip=192.168.254.66::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 ```
 
 * Router
@@ -86,10 +86,10 @@ kernel = rhcos-4.7.13-x86_64-live-kernel-x86_64
 [root@bastion ~]# virt-install --connect=qemu:///system --name="router01.c01" --vcpus=6 --ram=8096 \
 --disk path=/var/lib/libvirt/images/router01.qcow2,bus=virtio,size=80 \
 --os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
---boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.67::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
+--boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/worker.ign ip=192.168.254.67::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 
 [root@bastion ~]# virt-install --connect=qemu:///system --name="router02.c01" --vcpus=6 --ram=8096 \
 --disk path=/var/lib/libvirt/images/router01.qcow2,bus=virtio,size=80 \
 --os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
---boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.68::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
+--boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/worker.ign ip=192.168.254.68::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 ```
