@@ -41,7 +41,7 @@ kernel = rhcos-4.7.13-x86_64-live-kernel-x86_64
 [root@bastion ~]# cd rhcosbin
 [root@bastion ~]# virt-install --connect=qemu+ssh://root@hypervisor/system --name="bootstrap.c01" --vcpus=4 --ram=8192 \
 --disk path=/var/lib/libvirt/images/bootstrap.qcow2,bus=virtio,size=60 \
---os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
+--os-variant rhel8.0 --network type=direct,source=enp10s0,source_mode=bridge,model=virtio \
 --boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/bootstrap.ign ip=192.168.254.60::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 ```
 
@@ -49,17 +49,17 @@ kernel = rhcos-4.7.13-x86_64-live-kernel-x86_64
 ```bash
 [root@bastion ~]# virt-install --connect=qemu+ssh://root@hypervisor/system --name="master01.c01" --vcpus=6 --ram=10240 \
 --disk path=/var/lib/libvirt/images/master01.qcow2,bus=virtio,size=80 \
---os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
+--os-variant rhel8.0 --network type=direct,source=enp10s0,source_mode=bridge,model=virtio \
 --boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/master.ign ip=192.168.254.61::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 
 [root@bastion ~]# virt-install --connect=qemu+ssh://root@hypervisor/system --name="master02.c01" --vcpus=6 --ram=10240 \
 --disk path=/var/lib/libvirt/images/master02.qcow2,bus=virtio,size=80 \
---os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
+--os-variant rhel8.0 --network type=direct,source=enp10s0,source_mode=bridge,model=virtio \
 --boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/master.ign ip=192.168.254.62::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 
 [root@bastion ~]# virt-install --connect=qemu+ssh://root@hypervisor/system --name="master03.c01" --vcpus=6 --ram=10240 \
 --disk path=/var/lib/libvirt/images/master03.qcow2,bus=virtio,size=80 \
---os-variant rhel8.0 --network type=direct,source=enp0s31f6,source_mode=bridge,model=virtio \
+--os-variant rhel8.0 --network type=direct,source=enp10s0,source_mode=bridge,model=virtio \
 --boot menu=on --location ./ --extra-args "rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=/dev/vda coreos.live.rootfs_url=http://192.168.254.254:9090/openshift4/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://192.168.254.254:9090/openshift4/master.ign ip=192.168.254.63::192.168.254.1:255.255.255.0::enp1s0:none nameserver=192.168.254.254 " --noautoconsole
 ```
 
