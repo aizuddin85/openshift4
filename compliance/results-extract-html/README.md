@@ -35,11 +35,12 @@ drwxr-xr-x. 7 1000660000 1000660000   60 Aug  4 00:45 rhcos-worker
 [root@bastion ~]# podman push quay.io/mzali/oscap:latest
 ```
 
-5. Deploy cronjob(suspend: true, so we can create job from this as template).
+5. Deploy cronjob(suspend: true, so we can create job from this as template) and the configmap containing the script.
 
-**NOTE**: Ensure volume details are per result server(RS) PVC name(and any other details as per your env).
+**NOTE**: Ensure volume details are per result server(RS) PVC name(and any other details as per your env) in both cronJob and configMap.
 ```bash
 [root@bastion ~]# oc create -f extractor-job.yaml
+[root@bastion ~]# oc create -f mover_script_cm.yaml
 ```
 
 6. Now run the compliance report.
