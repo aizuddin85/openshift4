@@ -1,0 +1,18 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: compliance-hosting-pv
+spec:
+  capacity:
+    storage: 10Gi
+  nfs:
+    server: 192.168.254.70
+    path: /reports/compliance_result
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+    kind: PersistentVolumeClaim
+    namespace: openshift-compliance
+    name: compliance-hosting-pvc
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem

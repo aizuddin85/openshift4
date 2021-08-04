@@ -1,0 +1,78 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: extractor-custom-job
+  namespace: openshift-compliance
+  labels:
+    purpose: results-extractor
+spec:
+  schedule: 10 10 * * *
+  startingDeadlineSeconds: 200
+  concurrencyPolicy: Forbid
+  suspend: true
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          volumes:
+            - name: scan-vol-ocp
+              persistentVolumeClaim:
+                claimName: ocp4-cis
+            - name: scan-vol-master
+              persistentVolumeClaim:
+                claimName: ocp4-cis-node-master
+            - name: scan-vol-router
+              persistentVolumeClaim:
+                claimName: ocp4-cis-node-router
+            - name: scan-vol-worker
+              persistentVolumeClaim:
+                claimName: ocp4-cis-node-worker
+            - name: hosting-vol
+              persistentVolumeClaim:
+                claimName: compliance-hosting-pvc
+            - name: data-mover-script
+              configMap:
+                name: custom-data-mover-script
+                defaultMode: 493
+          containers:
+            - resources:
+                requests:
+                  cpu: 300m
+                  memory: 250Mi
+              terminationMessagePath: /dev/termination-log
+              name: pv-extractor-ocp-cis
+              command:
+                - /bin/bash
+                - '-c'
+              imagePullPolicy: IfNotPresent
+              volumeMounts:
+                - name: scan-vol-ocp
+                  mountPath: /scan-results-ocp
+                - name: scan-vol-master
+                  mountPath: /scan-results-master
+                - name: scan-vol-router
+                  mountPath: /scan-results-router
+                - name: scan-vol-worker
+                  mountPath: /scan-results-worker
+                - name: hosting-vol
+                  mountPath: /hosting-results
+                - name: data-mover-script
+                  mountPath: /usr/local/bin
+              terminationMessagePolicy: FallbackToLogsOnError
+              image: >-
+                quay.io/mzali/oscap@sha256:8c4a843993936a5f927b67c88b538c221ed72803d8e3264e05d4ef9aefa2792e
+              args:
+                - /usr/local/bin/mover.sh;
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          activeDeadlineSeconds: 200
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1

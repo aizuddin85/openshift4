@@ -1,0 +1,14 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: custom-data-mover-script
+  namespace: openshift-compliance
+data:
+  mover.sh: |
+    #!/usr/bin/env bash
+    cp -rvf /scan-results-ocp/* /hosting-results/ocp4-cis
+    cp -rvf /scan-results-master/* /hosting-results/rhcos-master
+    cp -rvf /scan-results-router/* /hosting-results/rhcos-router
+    cp -rvf /scan-results-worker/* /hosting-results/rhcos-worker
+    allbzip=`find  /hosting-results -name "*bzip2" -type f | egrep -v "html"`
+    for raw in $allbzip; do oscap xccdf generate report $raw > $raw.html; done
