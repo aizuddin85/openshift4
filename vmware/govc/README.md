@@ -121,4 +121,46 @@ iii. Control Plane 03
 
 [root@bastion-spodon ocp4]# govc vm.disk.change  -vm controlplane-ocp4-03 -disk.key=0 -size 100G
 ``` 
+
+
+iv. Worker Node 01
+```bash
+
+[root@bastion-spodon ocp4]# govc vm.clone -vm ocp4_8 -c=8 -m=24000 -dc="vSAN Datacenter" -ds=vsanDatastore -folder="Din VM" -net="1G DSwitch-Mgmt Network-ephemeral"  -on=false -debug=true workernode-ocp4-01
+
+[root@bastion-spodon ocp4]# export IPCFG="ip=172.21.11.160::172.21.11.1:255.255.255.0:::none nameserver=172.21.11.151"
+
+[root@bastion-spodon ocp4]# govc vm.change -vm workernode-ocp4-01 -e "guestinfo.afterburn.initrd.network-kargs=${IPCFG}"
+
+[root@bastion-spodon ocp4]# workernode64=`cat worker.b64`
+
+[root@bastion-spodon ocp4]# govc vm.change -vm workernode-ocp4-01 -e "guestinfo.ignition.config.data=${workernode64}"
+
+[root@bastion-spodon ocp4]# govc vm.change -vm workernode-ocp4-01 -e "guestinfo.ignition.config.data.encoding=base64"
+
+[root@bastion-spodon ocp4]# govc vm.change -vm workernode-ocp4-01 -e "disk.EnableUUID=true"
+
+[root@bastion-spodon ocp4]# govc vm.disk.change  -vm workernode-ocp4-01 -disk.key=0 -size 100G
+``` 
+
+v. Worker Node 02
+```bash
+
+[root@bastion-spodon ocp4]# govc vm.clone -vm ocp4_8 -c=8 -m=24000 -dc="vSAN Datacenter" -ds=vsanDatastore -folder="Din VM" -net="1G DSwitch-Mgmt Network-ephemeral"  -on=false -debug=true workernode-ocp4-02
+
+[root@bastion-spodon ocp4]# export IPCFG="ip=172.21.11.161::172.21.11.1:255.255.255.0:::none nameserver=172.21.11.151"
+
+[root@bastion-spodon ocp4]# govc vm.change -vm workernode-ocp4-02 -e "guestinfo.afterburn.initrd.network-kargs=${IPCFG}"
+
+[root@bastion-spodon ocp4]# workernode64=`cat worker.b64`
+
+[root@bastion-spodon ocp4]# govc vm.change -vm workernode-ocp4-02 -e "guestinfo.ignition.config.data=${workernode64}"
+
+[root@bastion-spodon ocp4]# govc vm.change -vm workernode-ocp4-02 -e "guestinfo.ignition.config.data.encoding=base64"
+
+[root@bastion-spodon ocp4]# govc vm.change -vm workernode-ocp4-02 -e "disk.EnableUUID=true"
+
+[root@bastion-spodon ocp4]# govc vm.disk.change  -vm workernode-ocp4-02 -disk.key=0 -size 100G
+``` 
+
 5. Now, switch on all the VM and let the installation begin and completed.
