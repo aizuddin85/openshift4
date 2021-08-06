@@ -57,9 +57,9 @@ b. Specifically just for the boostrap node, create `guestinfo.ignition.config.da
 
 c. Power on this bootstrap VM, then continue with master node VM creation.
 
-4. Create Master VM using govc client.
+4. Create Control Plane VM using govc client.
 
-a. Create Master VM from OVA VM Template
+a. Create Control Plane and Worker VM from OVA VM Template
 
 i. Control Plane 01
 ```bash
