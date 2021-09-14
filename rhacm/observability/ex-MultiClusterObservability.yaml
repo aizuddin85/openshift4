@@ -1,0 +1,123 @@
+apiVersion: observability.open-cluster-management.io/v1beta2
+kind: MultiClusterObservability
+metadata:
+  creationTimestamp: '2021-09-14T03:45:19Z'
+  finalizers:
+    - observability.open-cluster-management.io/res-cleanup
+  generation: 3
+  managedFields:
+    - apiVersion: observability.open-cluster-management.io/v1beta2
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          .: {}
+          'f:advanced':
+            .: {}
+            'f:receive':
+              .: {}
+              'f:replicas': {}
+              'f:resources':
+                .: {}
+                'f:limits':
+                  .: {}
+                  'f:memory': {}
+            'f:retentionConfig':
+              .: {}
+              'f:blockDuration': {}
+              'f:deleteDelay': {}
+              'f:retentionResolution1h': {}
+              'f:retentionResolution5m': {}
+              'f:retentionResolutionRaw': {}
+          'f:enableDownsampling': {}
+          'f:observabilityAddonSpec':
+            .: {}
+            'f:enableMetrics': {}
+            'f:interval': {}
+          'f:storageConfig':
+            .: {}
+            'f:alertmanagerStorageSize': {}
+            'f:compactStorageSize': {}
+            'f:metricObjectStorage':
+              .: {}
+              'f:key': {}
+              'f:name': {}
+            'f:receiveStorageSize': {}
+            'f:ruleStorageSize': {}
+            'f:storageClass': {}
+            'f:storeStorageSize': {}
+      manager: kubectl-create
+      operation: Update
+      time: '2021-09-14T03:45:19Z'
+    - apiVersion: observability.open-cluster-management.io/v1beta2
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:finalizers':
+            .: {}
+            'v:"observability.open-cluster-management.io/res-cleanup"': {}
+        'f:spec':
+          'f:advanced':
+            'f:receive':
+              'f:resources':
+                'f:limits':
+                  'f:memory': {}
+        'f:status':
+          .: {}
+          'f:conditions': {}
+      manager: mco-operator
+      operation: Update
+      time: '2021-09-14T03:45:30Z'
+    - apiVersion: observability.open-cluster-management.io/v1beta2
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:advanced':
+            'f:retentionConfig':
+              'f:retentionInLocal': {}
+      manager: Mozilla
+      operation: Update
+      time: '2021-09-14T05:13:16Z'
+  name: observability
+  resourceVersion: '773821'
+  uid: 592cfd58-26ef-44cf-95c2-77c9af398889
+spec:
+  advanced:
+    receive:
+      replicas: 3
+      resources:
+        limits:
+          memory: 4Ti
+    retentionConfig:
+      blockDuration: 2h
+      deleteDelay: 12h
+      retentionInLocal: 2m
+      retentionResolution1h: 0d
+      retentionResolution5m: 180d
+      retentionResolutionRaw: 30d
+  enableDownsampling: true
+  observabilityAddonSpec:
+    enableMetrics: true
+    interval: 60
+  storageConfig:
+    alertmanagerStorageSize: 1Gi
+    compactStorageSize: 100Gi
+    metricObjectStorage:
+      key: thanos.yaml
+      name: thanos-object-storage
+    receiveStorageSize: 100Gi
+    ruleStorageSize: 1Gi
+    storageClass: gp2
+    storeStorageSize: 10Gi
+status:
+  conditions:
+    - lastTransitionTime: '2021-09-14T03:45:30Z'
+      message: Installation is in progress
+      reason: Installing
+      status: 'True'
+      type: Installing
+    - lastTransitionTime: '2021-09-14T03:58:01Z'
+      message: Observability components are deployed and running
+      reason: Ready
+      status: 'True'
+      type: Ready
+
