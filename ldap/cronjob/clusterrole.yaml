@@ -15,3 +15,4 @@ rules:
       - list
       - create
       - update
+      - delete
