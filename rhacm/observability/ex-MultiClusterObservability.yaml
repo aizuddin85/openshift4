@@ -81,6 +81,7 @@ metadata:
   resourceVersion: '773821'
   uid: 592cfd58-26ef-44cf-95c2-77c9af398889
 spec:
+  #https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.3/html/apis/apis#observability-api
   advanced:
     receive:
       replicas: 3
@@ -88,26 +89,26 @@ spec:
         limits:
           memory: 4Ti
     retentionConfig:
-      blockDuration: 2h
-      deleteDelay: 12h
-      retentionInLocal: 2m
-      retentionResolution1h: 0d
-      retentionResolution5m: 180d
-      retentionResolutionRaw: 30d
+      blockDuration: 2h #determines how long samples will be stored in memory before they are flushed (the default recommendation being 2h).
+      deleteDelay: 12h #The amount of time until a block marked for deletion is deleted from a bucket.
+      retentionInLocal: 2m # The amount of time to retain raw samples from the local storage.
+      retentionResolution1h: 0d #Dont store 1h resolution in bucket
+      retentionResolution5m: 180d #Store 5m resolution for 180d in bucket
+      retentionResolutionRaw: 30d #Retain raw sample for 30d in bucket
   enableDownsampling: true
   observabilityAddonSpec:
     enableMetrics: true
     interval: 60
   storageConfig:
     alertmanagerStorageSize: 1Gi
-    compactStorageSize: 100Gi
+    compactStorageSize: 100Gi #The amount of storage applied to the thanos compact stateful sets.
     metricObjectStorage:
       key: thanos.yaml
       name: thanos-object-storage
-    receiveStorageSize: 100Gi
-    ruleStorageSize: 1Gi
+    receiveStorageSize: 100Gi #The amount of storage applied to thanos receive stateful sets.
+    ruleStorageSize: 1Gi #The amount of storage applied to thanos rule stateful sets
     storageClass: gp2
-    storeStorageSize: 10Gi
+    storeStorageSize: 10Gi #The amount of storage applied to thanos store stateful sets
 status:
   conditions:
     - lastTransitionTime: '2021-09-14T03:45:30Z'
