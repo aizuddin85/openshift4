@@ -82,6 +82,7 @@ metadata:
   uid: 592cfd58-26ef-44cf-95c2-77c9af398889
 spec:
   #https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.3/html/apis/apis#observability-api
+  #https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.3/html/observability/observing-environments-intro#persistent-stores-observability
   advanced:
     receive:
       replicas: 3
