@@ -1,0 +1,40 @@
+{
+    "Version": "2012-10-17",
+    "Id": "OCP4Manifest",
+    "Statement": [
+        {
+            "Sid": "ocp4CreateManifest",
+            "Effect": "Allow",
+            "Action": [
+                "iam:DeleteAccessKey",
+                "iam:DeleteUser",
+                "iam:DeleteUserPolicy",
+                "iam:GetUserPolicy",
+                "iam:ListAccessKeys",
+                "iam:PutUserPolicy",
+                "iam:TagUser",
+                "iam:GetUserPolicy",
+                "iam:ListAccessKeys",
+                "s3:PutBucketPublicAccessBlock",
+                "s3:GetBucketPublicAccessBlock",
+                "s3:PutLifecycleConfiguration",
+                "s3:HeadBucket",
+                "s3:ListBucketMultipartUploads",
+                "s3:AbortMultipartUpload",
+                "iam:CreateAccessKey",
+                "servicequotas:ListServiceQuotas",
+                "iam:CreateUser"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "ocp4QuotaCheck",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeInstanceTypeOfferings",
+                "servicequotas:ListAWSDefaultServiceQuotas"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
