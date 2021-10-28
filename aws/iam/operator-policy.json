@@ -3,7 +3,7 @@
     "Id": "OCP4Operator",
     "Statement": [
         {
-            "Sid": "ocp4OperatPolicy",
+            "Sid": "ocp4OperatorPolicy",
             "Effect": "Allow",
             "Action": [
                 "s3:DeleteObject",
