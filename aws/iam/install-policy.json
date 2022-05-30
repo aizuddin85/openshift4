@@ -55,7 +55,7 @@
                 "Resource": "*"
             },
             {
-                "Sid": "ec2Network",
+                "Sid": "OCP4ec2Network",
                 "Effect": "Allow",
                 "Action": [
                     "ec2:AllocateAddress",
@@ -77,7 +77,7 @@
                 "Resource": "*"
             },
             {
-                "Sid": "ec2Elb",
+                "Sid": "OCP4ec2Elb",
                 "Effect": "Allow",
                 "Action": [
                     "elasticloadbalancing:AddTags",
@@ -108,7 +108,7 @@
                 "Resource": "*"
             },
             {
-                "Sid": "ec2Iam",
+                "Sid": "OCP4ec2Iam",
                 "Effect": "Allow",
                 "Action": [
                     "iam:AddRoleToInstanceProfile",
@@ -133,7 +133,7 @@
                 "Resource": "*"
             },
             {
-                "Sid": "ec2Route53",
+                "Sid": "OCP4ec2Route53",
                 "Effect": "Allow",
                 "Action": [
                     "route53:ChangeResourceRecordSets",
@@ -151,7 +151,7 @@
                 "Resource": "*"
             },
             {
-                "Sid": "S3",
+                "Sid": "OCP4S3",
                 "Effect": "Allow",
                 "Action": [
                     "s3:CreateBucket",

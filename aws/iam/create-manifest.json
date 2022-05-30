@@ -3,7 +3,7 @@
     "Id": "OCP4Manifest",
     "Statement": [
         {
-            "Sid": "ocp4CreateManifest",
+            "Sid": "OCP4CreateManifest",
             "Effect": "Allow",
             "Action": [
                 "iam:DeleteAccessKey",
@@ -28,7 +28,7 @@
             "Resource": "*"
         },
         {
-            "Sid": "ocp4QuotaCheck",
+            "Sid": "OCP4QuotaCheck",
             "Effect": "Allow",
             "Action": [
                 "ec2:DescribeInstanceTypeOfferings",
