@@ -3,7 +3,7 @@
     "Id": "OCP4Delete",
     "Statement": [
         {
-            "Sid": "ocp4DeleteBase",
+            "Sid": "OCP4DeleteBase",
             "Effect": "Allow",
             "Action": [
                 "autoscaling:DescribeAutoScalingGroups",
@@ -25,7 +25,7 @@
             "Resource": "*"
         },
         {
-            "Sid": "ocp4DeleteNetwork",
+            "Sid": "OCP4DeleteNetwork",
             "Effect": "Allow",
             "Action": [
                 "ec2:DeleteDhcpOptions",
