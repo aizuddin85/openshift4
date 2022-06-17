@@ -28,8 +28,6 @@ def lambda_handler(event, context):
     
     if bootup:
       print("Starting up these instances: %s)" % ec2_to_bootup)
-      #for ec2ids in ec2_to_bootup:
-      # ec2.instances.filter(InstanceIds = ec2ids).start()
       ec2.instances.filter(InstanceIds = ec2_to_bootup).start()
       return {
             'statusCode': 200,

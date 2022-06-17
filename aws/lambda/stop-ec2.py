@@ -28,7 +28,6 @@ def lambda_handler(event, context):
     
     if shutdown:
       print("Shutting down these instances: %s)" % ec2_to_shutdown)
-      #for ec2ids in ec2_to_shutdown:
       ec2.instances.filter(InstanceIds = ec2_to_shutdown).stop()
       return {
             'statusCode': 200,
