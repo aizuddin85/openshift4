@@ -10,8 +10,10 @@ import (
 )
 
 func main() {
-	searchFilter := flag.String("filter", "", "Instance filter string")
+	searchFilterKey := flag.String("filterKey", "", "Instance tag filter key")
+	searchFilterVal := flag.String("filterVal", "", "Instance tag filter value")
 	flag.Parse()
+
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
@@ -21,9 +23,9 @@ func main() {
 	paramsInput := &ec2.DescribeInstancesInput{
 		Filters: []*ec2.Filter{
 			&ec2.Filter{
-				Name: aws.String(*searchFilter),
+				Name: aws.String(*searchFilterKey),
 				Values: []*string{
-					aws.String("owned"),
+					aws.String(*searchFilterVal),
 				},
 			},
 		},
@@ -47,6 +49,6 @@ func main() {
 				}
 			}
 		}
-		fmt.Println("Total number of instances:", len(result.Reservations), ",filtered by:", *searchFilter)
+		fmt.Println("Total number of instances:", len(result.Reservations), ",filtered by:", *searchFilterKey)
 	}
 }
