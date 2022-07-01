@@ -9,7 +9,7 @@ k8sObject=("project" "deployment" "deploymentconfig" "statefulset"
 
 filePrefix=$(date +%Y%m%d%s)
 
-for i in `oc get projects | egrep -v "^NAME" | cut -d " " -f 1 | egrep -v "^default|^kube|^openshift" `;
+for i in `oc get projects | egrep -v "^NAME|^default|^kube|^openshift" | cut -d " " -f 1`;
   do
     ns+=($i)
 done
