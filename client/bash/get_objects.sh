@@ -5,7 +5,7 @@ k8sObject=("project" "deployment" "deploymentconfig" "statefulset"
            "persistentvolumeclaim" "secrets" "serviceaccount" 
            "role" "rolebinding" "imagestream" "imagestreamtag"
            "configmap" "daemonset" "cronjob" "job" "replicaset" "replicationcontroller"
-           "horizontalpodautoscaler" "pods" )
+           "horizontalpodautoscaler" "pods" "service" "route")
 
 filePrefix=$(date +%Y%m%d%s)
 
